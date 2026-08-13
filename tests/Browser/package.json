@@ -1,0 +1,12 @@
+{
+    "name": "laranail-captcha-browser-tests",
+    "private": true,
+    "type": "module",
+    "description": "Browser coverage for the widget runtime. Not shipped — excluded from the package archive.",
+    "scripts": {
+        "test": "playwright test"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.50"
+    }
+}

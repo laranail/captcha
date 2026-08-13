@@ -1,0 +1,29 @@
+name: Feature request
+description: Propose a capability or a new provider.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you unable to do today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like
+    validations:
+      required: true
+
+  - type: input
+    id: provider-docs
+    attributes:
+      label: If this is a new provider, link its server-side verification docs
+      placeholder: https://…
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you tried instead
