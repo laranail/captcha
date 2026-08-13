@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+.phpunit.cache
+.phpunit.result.cache
+build
+composer.lock
+coverage
+phpunit.xml.bak
+testbench.yaml
+vendor

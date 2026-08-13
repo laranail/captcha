@@ -1,0 +1,142 @@
+{
+    "name": "laranail/captcha",
+    "description": "One captcha contract for Laravel across Turnstile, hCaptcha, every reCAPTCHA version, Friendly Captcha, Arkose Labs and self-hosted ALTCHA — with environment-scoped credentials, a database-backed settings store, and an edge bot-management middleware.",
+    "keywords": [
+        "laravel",
+        "laranail",
+        "captcha",
+        "turnstile",
+        "hcaptcha",
+        "recaptcha",
+        "friendly-captcha",
+        "altcha",
+        "arkose",
+        "bot-management",
+        "spam-protection"
+    ],
+    "homepage": "https://opensource.simtabi.com/products/laranail/captcha",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simtabi LLC",
+            "email": "opensource@simtabi.com",
+            "homepage": "https://opensource.simtabi.com",
+            "role": "Organization"
+        },
+        {
+            "name": "Imani Manyara",
+            "email": "imani@simtabi.com",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Rahul Dey",
+            "email": "rahul900day@gmail.com",
+            "role": "Original author of rahul900day/laravel-captcha"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/laranail/captcha/issues",
+        "source": "https://github.com/laranail/captcha",
+        "docs": "https://opensource.simtabi.com/documentation/laranail/captcha/"
+    },
+    "require": {
+        "php": "^8.4.1 || ^8.5",
+        "illuminate/cache": "^13.0",
+        "illuminate/console": "^13.0",
+        "illuminate/contracts": "^13.0",
+        "illuminate/database": "^13.0",
+        "illuminate/http": "^13.0",
+        "illuminate/routing": "^13.0",
+        "illuminate/support": "^13.0",
+        "illuminate/translation": "^13.0",
+        "illuminate/validation": "^13.0",
+        "illuminate/view": "^13.0",
+        "laranail/console": "^0.1",
+        "laranail/db-tools": "^0.7",
+        "laranail/enumerator": "^0.1",
+        "laranail/package-tools": "^0.1",
+        "psr/clock": "^1.0",
+        "psr/log": "^3.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/console"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/db-tools"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/enumerator"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/package-tools"
+        }
+    ],
+    "require-dev": {
+        "altcha-org/altcha": "^2.1",
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-arch": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "phpstan/phpstan": "^2.0",
+        "rector/rector": "^2.0",
+        "roave/security-advisories": "dev-latest"
+    },
+    "suggest": {
+        "altcha-org/altcha": "Required by the altcha adapter — self-hosted proof-of-work challenges with no third-party round trip (^2.1)."
+    },
+    "autoload": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Captcha\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Captcha\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest --colors=always",
+        "test-coverage": "@test --coverage",
+        "test-dirty": "@test --dirty --compact",
+        "lint": [
+            "@pint",
+            "@phpstan",
+            "@rector"
+        ],
+        "pint": "vendor/bin/pint --test",
+        "pint-fix": "vendor/bin/pint",
+        "phpstan": "vendor/bin/phpstan analyse --no-progress",
+        "rector": "vendor/bin/rector process --dry-run",
+        "rector-fix": "vendor/bin/rector process",
+        "audit": "@composer audit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Simtabi\\Laranail\\Captcha\\Providers\\CaptchaServiceProvider"
+            ],
+            "aliases": {
+                "Captcha": "Simtabi\\Laranail\\Captcha\\Facades\\Captcha"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

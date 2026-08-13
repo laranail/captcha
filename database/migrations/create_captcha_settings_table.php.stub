@@ -1,0 +1,46 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * The fallback settings table, for applications with nowhere else to put captcha credentials.
+ *
+ * Optional. Point `laranail.captcha.credentials.database.model` at your own model implementing
+ * `ProvidesCaptchaSettings` and this table is never created.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create(config('laranail.captcha.credentials.database.table', 'captcha_settings'), function (Blueprint $table): void {
+            $table->id();
+
+            $table->string('provider', 64);
+
+            // The deployment this row applies to, so production and staging keys live side by
+            // side. Not nullable: a row that applies to "any environment" is how a staging key
+            // ends up verifying production traffic.
+            $table->string('environment', 64);
+
+            // `site_key`, `secret`, or a provider-specific extra such as `project_id`.
+            $table->string('key', 64);
+
+            // Encrypted at rest by the model's cast, which is why this is text rather than a
+            // sized string — ciphertext is substantially longer than what goes into it.
+            $table->text('value')->nullable();
+
+            $table->timestamps();
+
+            $table->unique(['provider', 'environment', 'key']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists(config('laranail.captcha.credentials.database.table', 'captcha_settings'));
+    }
+};

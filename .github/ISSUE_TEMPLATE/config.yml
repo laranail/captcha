@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://opensource.simtabi.com/documentation/laranail/captcha/
+    about: Installation, configuration, providers and recipes.
+  - name: Questions and ideas
+    url: https://github.com/laranail/captcha/discussions
+    about: Ask a question or propose something before opening an issue.
+  - name: Report a security vulnerability
+    url: mailto:opensource@simtabi.com
+    about: Never report a vulnerability in a public issue.

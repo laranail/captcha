@@ -1,0 +1,43 @@
+version: 2
+
+updates:
+  - package-ecosystem: composer
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 10
+    labels: [dependencies]
+    groups:
+      # The toolchain moves together and is verified by the same CI run, so one PR per week
+      # rather than five. A failure in any of them means the same thing: fix or hold.
+      dev-toolchain:
+        dependency-type: development
+        patterns:
+          - "phpstan/*"
+          - "larastan/*"
+          - "laravel/pint"
+          - "rector/*"
+          - "pestphp/*"
+          - "phpunit/*"
+          - "mockery/*"
+          - "orchestra/*"
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    labels: [dependencies, ci]
+    groups:
+      # Actions are SHA-pinned with a trailing version comment; Dependabot rewrites both.
+      # Re-pin on every merged PR rather than letting a tag drift — a moved tag is how the
+      # tj-actions compromise spread.
+      actions:
+        patterns:
+          - "*"
