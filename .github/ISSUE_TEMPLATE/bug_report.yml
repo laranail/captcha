@@ -1,0 +1,66 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never include a real site key or secret. Redact them.
+        Security vulnerabilities go to `opensource@simtabi.com`, not here.
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options:
+        - turnstile
+        - hcaptcha
+        - recaptcha-v2
+        - recaptcha-v2-invisible
+        - recaptcha-v3
+        - recaptcha-enterprise
+        - friendly-captcha
+        - arkose
+        - altcha
+        - not provider-specific
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: PHP and Laravel versions
+      placeholder: PHP 8.4.3, Laravel 13.25
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead
+      description: Include the output of `php artisan laranail::captcha.doctor` if it is relevant. It redacts secrets.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: The smallest config, blade and validation rule that shows the problem.
+    validations:
+      required: true

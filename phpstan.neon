@@ -1,0 +1,30 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: max
+    paths:
+        - src
+    excludePaths:
+        - vendor
+    ignoreErrors:
+        # Generic array value types in docblocks are not enforced (laranail convention).
+        -
+            identifier: missingType.iterableValue
+
+        # larastan cannot resolve a package-namespaced view string during analysis, so every
+        # `view('captcha::components.…')` looks like an unverified string. The views are real and
+        # the component tests render all three.
+        -
+            identifier: argument.type
+            path: src/View/Components/*.php
+            message: '#\$view of function view expects view-string#'
+
+        # Laravel's `encrypted` cast throws DecryptException when the payload was written under a
+        # different APP_KEY, but the throw is inside the cast rather than the accessor, so PHPStan
+        # reads the catch as dead. It is not: removing it turns a key rotation into every login
+        # failing with a 500, and `CredentialResolutionTest` covers the path.
+        -
+            identifier: catch.neverThrown
+            path: src/Models/CaptchaSetting.php
+    treatPhpDocTypesAsCertain: false

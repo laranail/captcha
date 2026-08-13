@@ -1,0 +1,131 @@
+name: Install
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: install-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Installs the package the way a consumer receives it, into a real Laravel application.
+  #
+  # Every other job runs against the working tree, where every file exists by definition. A
+  # consumer gets the Composer dist, which is the working tree with `.gitattributes export-ignore`
+  # applied — so an ignore rule that strips `resources/` or `config/` produces a package that is
+  # broken for everyone while all 251 tests stay green. Nothing else here can see that.
+  install:
+    name: Install into a real Laravel application
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath, intl
+          coverage: none
+
+      # `git archive` is precisely how Composer builds a dist from a tag, export-ignore and all.
+      # Extracting it here means everything downstream sees only what a consumer would.
+      - name: Build the dist exactly as Composer would
+        run: |
+          mkdir -p /tmp/dist
+          git archive --format=tar HEAD | tar -x -C /tmp/dist
+          echo "Packaged top level:"
+          ls /tmp/dist
+
+      # Named explicitly rather than left to the render step, so a failure says which path went
+      # missing instead of surfacing as a confusing Blade error several minutes later.
+      - name: Assert nothing the runtime needs was export-ignored
+        run: |
+          missing=0
+          for path in \
+            composer.json \
+            src/Providers/CaptchaServiceProvider.php \
+            config/captcha.php \
+            resources/views/components/captcha.blade.php \
+            resources/lang \
+            database/migrations
+          do
+            if [ ! -e "/tmp/dist/$path" ]; then
+              echo "::error::$path is missing from the packaged dist; check .gitattributes"
+              missing=1
+            fi
+          done
+          # The other direction: the dist must stay lean. tests/ is the big one.
+          for path in tests docs phpunit.xml .github; do
+            if [ -e "/tmp/dist/$path" ]; then
+              echo "::error::$path ships to consumers but should be export-ignored"
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - name: Create a scratch Laravel application
+        run: composer create-project laravel/laravel /tmp/app "^13.0" --no-interaction --prefer-dist
+
+      # Composer ignores a dependency's own `repositories`, so the root application declares the
+      # full transitive laranail closure — the same thing docs/installation.md tells consumers.
+      - name: Install the package from the dist
+        working-directory: /tmp/app
+        run: |
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer config repositories.captcha '{"type":"path","url":"/tmp/dist","options":{"symlink":false}}'
+          composer config repositories.console '{"type":"vcs","url":"https://github.com/laranail/console"}'
+          composer config repositories.db-tools '{"type":"vcs","url":"https://github.com/laranail/db-tools"}'
+          composer config repositories.enumerator '{"type":"vcs","url":"https://github.com/laranail/enumerator"}'
+          composer config repositories.package-tools '{"type":"vcs","url":"https://github.com/laranail/package-tools"}'
+          composer require "laranail/captcha:*@dev" --no-interaction --no-progress
+
+      # A package that fails to register its validation rule boots cleanly and accepts every form
+      # submission, so booting is not the assertion — the doctor is.
+      - name: Boot the application and check the install
+        working-directory: /tmp/app
+        run: php artisan laranail::captcha.doctor
+
+      - name: Render the component from the installed package
+        working-directory: /tmp/app
+        run: |
+          output=$(php artisan tinker --execute="echo Blade::render('<x-captcha />');")
+          echo "$output"
+          # The default provider is self-hosted arithmetic, so this must render a real question
+          # with no keys and no network — the zero-config promise in the README.
+          echo "$output" | grep -q 'data-captcha-config' \
+            || { echo "::error::the component rendered no captcha container"; exit 1; }
+          echo "$output" | grep -q 'captcha_challenge' \
+            || { echo "::error::the signed challenge is missing from the rendered form"; exit 1; }
+
+      - name: Publish every tag the package advertises
+        working-directory: /tmp/app
+        run: |
+          for tag in config migrations translations views; do
+            php artisan vendor:publish --tag="laranail::captcha-$tag" --force --no-interaction
+          done
+          # `vendor:publish` exits zero for a tag that does not exist and publishes nothing, so
+          # every tag is checked by the file it should have produced. Paths confirmed against a
+          # real install rather than assumed — translations land under lang/vendor/laranail/.
+          failed=0
+          check() {
+            if ! ls -d "$1" >/dev/null 2>&1; then
+              echo "::error::the $2 tag published nothing to $1"
+              failed=1
+            fi
+          }
+          check "config/laranail/captcha.php"          config
+          check "resources/views/vendor/captcha"       views
+          check "lang/vendor/laranail/captcha/en"      translations
+          check "database/migrations/*captcha*"        migrations
+          exit $failed
