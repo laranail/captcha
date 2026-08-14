@@ -94,6 +94,6 @@ enum ErrorCode: string implements Enumerator
     /** The translation key carrying the visitor-facing message for this failure. */
     public function translationKey(): string
     {
-        return 'captcha::validation.' . $this->value;
+        return 'laranail-captcha::validation.' . $this->value;
     }
 }

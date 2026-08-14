@@ -35,7 +35,7 @@ final class Js extends Component
         $captcha = app(CaptchaService::class);
         $widget = $captcha->widget();
 
-        return view('captcha::components.js', [
+        return view('laranail-captcha::components.js', [
             'scriptUrl' => $widget->scriptUrl,
             'nonce' => $this->nonce,
             'lang' => Locale::sanitise($this->lang),

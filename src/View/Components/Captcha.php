@@ -72,7 +72,7 @@ final class Captcha extends Component
             $attributes['data-size'] = $this->size;
         }
 
-        return view('captcha::components.captcha', [
+        return view('laranail-captcha::components.captcha', [
             'widget' => $widget,
             'widgetAttributes' => $attributes,
             'scriptUrl' => $widget->scriptUrl,

@@ -23,7 +23,7 @@
         id="{{ $widget->instanceId }}"
         data-captcha-config="{{ json_encode($config) }}">
         <label for="{{ $widget->instanceId }}-answer">
-            {{ $label ?? __('captcha::widget.prompt') }}
+            {{ $label ?? __('laranail-captcha::widget.prompt') }}
             <span class="laranail-captcha-question" id="{{ $widget->instanceId }}-question">{{ $problem->question }}</span>
         </label>
 

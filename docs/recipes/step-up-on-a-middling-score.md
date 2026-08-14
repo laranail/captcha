@@ -16,7 +16,7 @@ $result = Captcha::verify($token, new VerificationContext(
 return match ($result->outcome) {
     Outcome::Allow  => $this->logIn($user),
     Outcome::Review => $this->sendOneTimeCode($user),
-    Outcome::Block  => back()->withErrors(['captcha' => __('captcha::validation.low-score')]),
+    Outcome::Block  => back()->withErrors(['captcha' => __('laranail-captcha::validation.low-score')]),
 };
 ```
 

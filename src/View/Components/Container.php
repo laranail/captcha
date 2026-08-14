@@ -42,7 +42,7 @@ final class Container extends Component
             $attributes['data-size'] = $this->size;
         }
 
-        return view('captcha::components.container', [
+        return view('laranail-captcha::components.container', [
             'widget' => $this->widget,
             'widgetAttributes' => $attributes,
         ]);

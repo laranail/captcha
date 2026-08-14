@@ -62,10 +62,10 @@ final class CaptchaServiceProvider extends PackageServiceProvider
             ->name('laranail/captcha')
             ->setPublishTagId('captcha')
             ->hasConfigFile('captcha')
-            ->hasViews('captcha')
+            ->hasViews('laranail-captcha')
             ->hasTranslations('captcha')
             // Explicit aliases, not a component namespace. A namespace resolves as
-            // `<x-captcha::js />`; the tags this package has always documented, and the ones every
+            // `<x-laranail-captcha::js />`; the tags this package has always documented, and the ones every
             // existing application's markup already contains, are `<x-captcha-js />` and
             // `<x-captcha-container />`. Keeping them is what makes the migration a namespace
             // change rather than a sweep through every blade file.
