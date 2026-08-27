@@ -128,7 +128,7 @@ jobs:
             fi
           }
           check "config/laranail/captcha.php"          config
-          check "resources/views/vendor/captcha"       views
+          check "resources/views/vendor/laranail-captcha" views
           check "lang/vendor/laranail/captcha/en"      translations
           check "database/migrations/*captcha*"        migrations
           exit $failed

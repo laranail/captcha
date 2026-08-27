@@ -52,7 +52,7 @@
         "illuminate/validation": "^13.0",
         "illuminate/view": "^13.0",
         "laranail/console": "^0.1",
-        "laranail/db-tools": "^0.7",
+        "laranail/db-tools": "^0.1",
         "laranail/enumerator": "^0.1",
         "laranail/package-tools": "^0.1",
         "psr/clock": "^1.0",

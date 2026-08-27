@@ -39,7 +39,6 @@ declare(strict_types=1);
  * Usage:
  *   php scripts/verify-dist-integrity.php [revision]      # default HEAD
  */
-
 $revision = $argv[1] ?? 'HEAD';
 $root = dirname(__DIR__);
 
