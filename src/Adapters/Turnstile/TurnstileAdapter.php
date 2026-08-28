@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Turnstile;
 
-use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
-use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
+use Illuminate\Http\Client\PendingRequest;
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
 
 final class TurnstileAdapter extends SiteVerifyAdapter
 {
@@ -30,13 +30,13 @@ final class TurnstileAdapter extends SiteVerifyAdapter
             containerClass: 'cf-turnstile',
             attributes: [
                 'data-sitekey' => $this->credentials->siteKey,
-                'data-theme' => $this->stringOption('theme'),
-                'data-size' => $this->stringOption('size'),
+                'data-theme'   => $this->stringOption('theme'),
+                'data-size'    => $this->stringOption('size'),
                 // The locale Turnstile actually reads. The package this replaces documented
                 // locale support "via the container component" and then never emitted this
                 // attribute, so the setting did nothing for the default provider.
                 'data-language' => $this->stringOption('language'),
-                'data-action' => $this->stringOption('action'),
+                'data-action'   => $this->stringOption('action'),
             ],
             scriptUrl: self::SCRIPT_URL,
         );
@@ -61,24 +61,6 @@ final class TurnstileAdapter extends SiteVerifyAdapter
     }
 
     /**
-     * A stable key for one token, so a retry is recognised as the same attempt.
-     *
-     * Derived from the token rather than random, so two processes racing the same submission
-     * also collapse to one redemption at Cloudflare's end. Hashed because the raw token should
-     * not appear in a second field of the same request.
-     */
-    private function idempotencyKey(string $token): string
-    {
-        $hash = hash('sha256', $token);
-
-        return sprintf(
-            '%s-%s-%s-%s-%s',
-            substr($hash, 0, 8), substr($hash, 8, 4), substr($hash, 12, 4),
-            substr($hash, 16, 4), substr($hash, 20, 12),
-        );
-    }
-
-    /**
      * The one provider where a retry is safe, and only when the caller supplied a key.
      *
      * Cloudflare treats a repeat siteverify carrying the same `idempotency_key` as the same
@@ -94,6 +76,27 @@ final class TurnstileAdapter extends SiteVerifyAdapter
     protected function client(): PendingRequest
     {
         return $this->http->request();
+    }
+
+    /**
+     * A stable key for one token, so a retry is recognised as the same attempt.
+     *
+     * Derived from the token rather than random, so two processes racing the same submission
+     * also collapse to one redemption at Cloudflare's end. Hashed because the raw token should
+     * not appear in a second field of the same request.
+     */
+    private function idempotencyKey(string $token): string
+    {
+        $hash = hash('sha256', $token);
+
+        return sprintf(
+            '%s-%s-%s-%s-%s',
+            substr($hash, 0, 8),
+            substr($hash, 8, 4),
+            substr($hash, 12, 4),
+            substr($hash, 16, 4),
+            substr($hash, 20, 12),
+        );
     }
 
     private function stringOption(string $key): ?string

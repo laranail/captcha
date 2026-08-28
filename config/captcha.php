@@ -60,7 +60,7 @@ return [
             // CaptchaSetting model, whose migration you publish with the install command.
             'model' => null,
 
-            'table' => 'captcha_settings',
+            'table'      => 'captcha_settings',
             'connection' => null,
 
             // What a reachable database with no matching row means.
@@ -78,15 +78,15 @@ return [
             // measured that it matters and the cache store is as protected as the database.
             'cache' => [
                 'enabled' => false,
-                'store' => null,
-                'ttl' => 300,
+                'store'   => null,
+                'ttl'     => 300,
             ],
         ],
 
         'test_keys' => [
             // The providers' published always-pass keys, so a fresh checkout works with no
             // setup. Refused in production regardless of this setting.
-            'enabled' => env('CAPTCHA_TEST_KEYS', true),
+            'enabled'      => env('CAPTCHA_TEST_KEYS', true),
             'environments' => ['local', 'testing'],
         ],
     ],
@@ -106,36 +106,36 @@ return [
         'default' => [
             'turnstile' => [
                 'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_SECRET_KEY'),
+                'secret'   => env('CAPTCHA_SECRET_KEY'),
             ],
             'hcaptcha' => [
                 'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_SECRET_KEY'),
+                'secret'   => env('CAPTCHA_SECRET_KEY'),
             ],
             'recaptcha-v2' => [
                 'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_SECRET_KEY'),
+                'secret'   => env('CAPTCHA_SECRET_KEY'),
             ],
             'recaptcha-v2-invisible' => [
                 'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_SECRET_KEY'),
+                'secret'   => env('CAPTCHA_SECRET_KEY'),
             ],
             'recaptcha-v3' => [
                 'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_SECRET_KEY'),
+                'secret'   => env('CAPTCHA_SECRET_KEY'),
             ],
             'recaptcha-enterprise' => [
-                'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_ENTERPRISE_API_KEY'),
+                'site_key'   => env('CAPTCHA_SITE_KEY'),
+                'secret'     => env('CAPTCHA_ENTERPRISE_API_KEY'),
                 'project_id' => env('CAPTCHA_ENTERPRISE_PROJECT_ID'),
             ],
             'friendly-captcha' => [
                 'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_SECRET_KEY'),
+                'secret'   => env('CAPTCHA_SECRET_KEY'),
             ],
             'arkose' => [
                 'site_key' => env('CAPTCHA_SITE_KEY'),
-                'secret' => env('CAPTCHA_SECRET_KEY'),
+                'secret'   => env('CAPTCHA_SECRET_KEY'),
                 // The per-customer verify subdomain: {client}-verify.arkoselabs.com
                 'client' => env('CAPTCHA_ARKOSE_CLIENT'),
             ],
@@ -156,14 +156,14 @@ return [
     */
     'verification' => [
 
-        'timeout' => 5,
+        'timeout'         => 5,
         'connect_timeout' => 2,
-        'verify_tls' => true,
+        'verify_tls'      => true,
 
         // Reject a challenge solved on a host this application does not serve. The site key is
         // public, so anyone can host the widget and collect real tokens; the hostname is the
         // only field that says where one was solved. An empty list disables the comparison.
-        'enforce_hostname' => true,
+        'enforce_hostname'  => true,
         'allowed_hostnames' => [],
 
         // Reject a token minted for a different action — the newsletter form, replayed on login.
@@ -175,8 +175,8 @@ return [
 
         'replay_guard' => [
             'enabled' => true,
-            'ttl' => 600,
-            'store' => null,
+            'ttl'     => 600,
+            'store'   => null,
 
             // Whether a cache outage should let submissions through. False rejects real
             // visitors while the cache is down; true reopens the replay window. Neither is
@@ -188,7 +188,7 @@ return [
         // `review` is blocked; between them the result carries Outcome::Review so the host can
         // ask for a second factor instead of rejecting.
         'score' => [
-            'allow' => 0.5,
+            'allow'  => 0.5,
             'review' => 0.3,
         ],
     ],
@@ -221,7 +221,7 @@ return [
             // eu | global. EU is the default because data residency is the reason to choose
             // this provider at all.
             'endpoint' => env('CAPTCHA_FRIENDLY_ENDPOINT', 'eu'),
-            'start' => 'focus',
+            'start'    => 'focus',
 
             // Friendly Captcha's reset is a method on the WidgetHandle that sdk.createWidget()
             // returns — there is no global to call. Expose your own function on window and name
@@ -240,8 +240,8 @@ return [
             // Signs every challenge. Left null it derives a key from APP_KEY — never APP_KEY
             // itself — so this works on a fresh install and rotating one key does not silently
             // change the meaning of the other.
-            'hmac_key' => env('CAPTCHA_CHALLENGE_KEY'),
-            'max_number' => 100_000,
+            'hmac_key'      => env('CAPTCHA_CHALLENGE_KEY'),
+            'max_number'    => 100_000,
             'expires_after' => 300,
         ],
 
@@ -278,7 +278,7 @@ return [
     |
     */
     'logging' => [
-        'enabled' => env('CAPTCHA_LOGGING', false),
+        'enabled'       => env('CAPTCHA_LOGGING', false),
         'failure_level' => env('CAPTCHA_LOG_LEVEL', 'debug'),
     ],
 
@@ -293,9 +293,9 @@ return [
     |
     */
     'challenge' => [
-        'route' => '/captcha/challenge',
+        'route'      => '/captcha/challenge',
         'rate_limit' => '60,1',
-        'store' => null,
+        'store'      => null,
     ],
 
     /*
@@ -307,8 +307,8 @@ return [
     |
     */
     'widget' => [
-        'theme' => env('CAPTCHA_THEME', 'auto'),
-        'size' => env('CAPTCHA_SIZE', 'normal'),
+        'theme'    => env('CAPTCHA_THEME', 'auto'),
+        'size'     => env('CAPTCHA_SIZE', 'normal'),
         'language' => env('CAPTCHA_LOCALE'),
 
         // Emit a nonce on injected script tags so a strict CSP does not need unsafe-inline.
@@ -326,14 +326,14 @@ return [
     |
     */
     'bot_management' => [
-        'enabled' => false,
-        'adapter' => 'null',
+        'enabled'   => false,
+        'adapter'   => 'null',
         'fail_open' => true,
 
         'datadome' => [
             'server_key' => env('DATADOME_SERVER_KEY'),
-            'endpoint' => env('DATADOME_ENDPOINT', 'https://api.datadome.co/validate-request/'),
-            'timeout' => 1,
+            'endpoint'   => env('DATADOME_ENDPOINT', 'https://api.datadome.co/validate-request/'),
+            'timeout'    => 1,
         ],
     ],
 ];

@@ -58,6 +58,16 @@ final class ResponseField
     }
 
     /**
+     * Every field name a token might arrive under, for the current provider.
+     *
+     * @return list<string>
+     */
+    public static function candidates(Provider $provider): array
+    {
+        return array_values(array_unique([self::CANONICAL, $provider->vendorResponseField()]));
+    }
+
+    /**
      * Fold a server-rendered challenge and its typed answer into one token.
      *
      * Deliberately tolerant about the answer — it is whatever the visitor typed, including blank —
@@ -90,15 +100,5 @@ final class ResponseField
         $payload['answer'] = is_string($answer) || is_int($answer) ? (string) $answer : '';
 
         return base64_encode((string) json_encode($payload));
-    }
-
-    /**
-     * Every field name a token might arrive under, for the current provider.
-     *
-     * @return list<string>
-     */
-    public static function candidates(Provider $provider): array
-    {
-        return array_values(array_unique([self::CANONICAL, $provider->vendorResponseField()]));
     }
 }

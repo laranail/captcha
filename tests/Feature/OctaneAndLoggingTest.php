@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Log;
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Illuminate\Contracts\Events\Dispatcher;
 use Simtabi\Laranail\Captcha\Facades\Captcha;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 
 /**
  * The two things that only go wrong on someone else's infrastructure.

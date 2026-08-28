@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Blade;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Symfony\Component\Process\Process;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 
 /**
  * Runs the emitted JavaScript, rather than asserting it was emitted.
@@ -28,7 +28,7 @@ function extractRuntime(): string
     config()->set('laranail.captcha.provider', 'turnstile');
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'site-key-abc',
-        'secret' => 'secret-key',
+        'secret'   => 'secret-key',
     ]);
 
     app()->forgetInstance(CaptchaService::class);

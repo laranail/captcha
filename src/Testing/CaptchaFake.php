@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Testing;
 
 use PHPUnit\Framework\Assert;
-use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
  * The adapter a host application's tests run against.
@@ -110,6 +110,7 @@ final class CaptchaFake implements CaptchaAdapter
 
     /**
      * @param null|callable(VerificationAttempt): bool $matching
+     *
      * @return list<VerificationAttempt>
      */
     private function matching(bool $passed, ?callable $matching): array

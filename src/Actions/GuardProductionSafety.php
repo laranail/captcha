@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Actions;
 
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
+use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
 
 /**
  * Refuse a configuration that would verify everything in production.

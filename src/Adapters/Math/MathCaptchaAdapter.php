@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Math;
 
+use Throwable;
 use DateTimeImmutable;
-use Illuminate\Contracts\Cache\Repository;
-use Psr\Clock\ClockInterface;
 use SensitiveParameter;
+use Psr\Clock\ClockInterface;
+use Illuminate\Contracts\Cache\Repository;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
 use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Contracts\ChallengePayload;
 use Simtabi\Laranail\Captcha\Contracts\IssuesChallenges;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Throwable;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
  * A math captcha that is actually worth deploying.
@@ -177,9 +177,9 @@ final readonly class MathCaptchaAdapter implements CaptchaAdapter, IssuesChallen
         }
 
         return [
-            'id' => $payload['id'],
-            'answer' => trim((string) $answer),
-            'expires' => $payload['expires'],
+            'id'        => $payload['id'],
+            'answer'    => trim((string) $answer),
+            'expires'   => $payload['expires'],
             'signature' => $payload['signature'],
         ];
     }

@@ -4,55 +4,55 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Providers;
 
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Http\Client\Factory as HttpFactory;
+use Override;
+use Psr\Log\LoggerInterface;
+use Psr\Clock\ClockInterface;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use Override;
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
-use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Events\Dispatcher;
+use Simtabi\Laranail\Package\Tools\Package;
 use Simtabi\Laranail\Captcha\AdapterFactory;
-use Simtabi\Laranail\Captcha\BotManagement\DataDomeBotManager;
-use Simtabi\Laranail\Captcha\BotManagement\NullBotManager;
-use Simtabi\Laranail\Captcha\Commands\CacheClearCommand;
-use Simtabi\Laranail\Captcha\Commands\DoctorCommand;
-use Simtabi\Laranail\Captcha\Commands\InstallCommand;
-use Simtabi\Laranail\Captcha\Commands\KeysCommand;
-use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
-use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\Contracts\ProvidesCaptchaSettings;
-use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
-use Simtabi\Laranail\Captcha\Credentials\CachedCredentialStore;
-use Simtabi\Laranail\Captcha\Credentials\ChainCredentialStore;
-use Simtabi\Laranail\Captcha\Credentials\ConfigCredentialStore;
-use Simtabi\Laranail\Captcha\Credentials\DatabaseCredentialStore;
-use Simtabi\Laranail\Captcha\Credentials\TestKeyCredentialStore;
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Events\CaptchaFailed;
-use Simtabi\Laranail\Captcha\Events\CaptchaVerified;
-use Simtabi\Laranail\Captcha\Http\Controllers\ChallengeController;
-use Simtabi\Laranail\Captcha\Listeners\LogCaptchaOutcome;
-use Simtabi\Laranail\Captcha\Listeners\ResetCaptchaState;
-use Simtabi\Laranail\Captcha\Models\CaptchaSetting;
-use Simtabi\Laranail\Captcha\Rules\Captcha as CaptchaRule;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
-use Simtabi\Laranail\Captcha\Support\CacheReplayGuard;
-use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
+use Illuminate\Contracts\Foundation\Application;
+use Simtabi\Laranail\Captcha\View\Components\Js;
 use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
 use Simtabi\Laranail\Captcha\Support\SystemClock;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationPolicy;
-use Simtabi\Laranail\Captcha\View\Components\Captcha as CaptchaComponent;
-use Simtabi\Laranail\Captcha\View\Components\Container;
-use Simtabi\Laranail\Captcha\View\Components\Js;
 use Simtabi\Laranail\DbTools\Guard\DatabaseGuard;
-use Simtabi\Laranail\Package\Tools\Package;
+use Illuminate\Http\Client\Factory as HttpFactory;
+use Simtabi\Laranail\Captcha\Commands\KeysCommand;
+use Simtabi\Laranail\Captcha\Events\CaptchaFailed;
+use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
+use Simtabi\Laranail\Captcha\Models\CaptchaSetting;
+use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
+use Simtabi\Laranail\Captcha\Commands\DoctorCommand;
+use Simtabi\Laranail\Captcha\Events\CaptchaVerified;
+use Simtabi\Laranail\Captcha\Commands\InstallCommand;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
+use Simtabi\Laranail\Captcha\Support\CacheReplayGuard;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\View\Components\Container;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Commands\CacheClearCommand;
+use Simtabi\Laranail\Captcha\Listeners\LogCaptchaOutcome;
+use Simtabi\Laranail\Captcha\Listeners\ResetCaptchaState;
+use Simtabi\Laranail\Captcha\BotManagement\NullBotManager;
+use Simtabi\Laranail\Captcha\Rules\Captcha as CaptchaRule;
+use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
+use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationPolicy;
+use Simtabi\Laranail\Captcha\BotManagement\DataDomeBotManager;
+use Simtabi\Laranail\Captcha\Credentials\ChainCredentialStore;
+use Simtabi\Laranail\Captcha\Contracts\ProvidesCaptchaSettings;
+use Simtabi\Laranail\Captcha\Credentials\CachedCredentialStore;
+use Simtabi\Laranail\Captcha\Credentials\ConfigCredentialStore;
+use Simtabi\Laranail\Captcha\Credentials\TestKeyCredentialStore;
+use Simtabi\Laranail\Captcha\Credentials\DatabaseCredentialStore;
+use Simtabi\Laranail\Captcha\Http\Controllers\ChallengeController;
 use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
+use Simtabi\Laranail\Captcha\View\Components\Captcha as CaptchaComponent;
 
 final class CaptchaServiceProvider extends PackageServiceProvider
 {
@@ -70,8 +70,8 @@ final class CaptchaServiceProvider extends PackageServiceProvider
             // `<x-captcha-container />`. Keeping them is what makes the migration a namespace
             // change rather than a sweep through every blade file.
             ->hasBladeComponentAliases([
-                'captcha' => CaptchaComponent::class,
-                'captcha-js' => Js::class,
+                'captcha'           => CaptchaComponent::class,
+                'captcha-js'        => Js::class,
                 'captcha-container' => Container::class,
             ])
             ->hasCommands([
@@ -238,6 +238,61 @@ final class CaptchaServiceProvider extends PackageServiceProvider
     }
 
     /**
+     * Build the database store, or return null when it cannot be built.
+     *
+     * A misconfigured `model` — a class that does not exist, or one that does not implement the
+     * contract — degrades to the config store rather than throwing. Throwing here happens during
+     * registration, which means the application does not boot at all; for a settings-source
+     * misconfiguration that is a wildly disproportionate failure, and the doctor command reports
+     * the gap where someone will actually see it.
+     */
+    private static function makeDatabaseStore(Application $app, CaptchaConfig $config): ?CredentialStore
+    {
+        $class = $config->stringOrNull('credentials.database.model') ?? CaptchaSetting::class;
+
+        if (! class_exists($class) || ! is_subclass_of($class, ProvidesCaptchaSettings::class)) {
+            return null;
+        }
+
+        /** @var ProvidesCaptchaSettings $settings */
+        $settings = $app->make($class);
+
+        $store = new DatabaseCredentialStore(
+            settings: $settings,
+            // Resolved statically because db-tools documents this entry point as safe before its
+            // own provider has registered — which is exactly the window a credential lookup can
+            // land in during `migrate` or a console boot.
+            database: DatabaseGuard::resolve(),
+            table: $config->string('credentials.database.table', 'captcha_settings'),
+            absentRowDisables: $config->string('credentials.database.row_absent_means') === 'disabled',
+            connection: $config->stringOrNull('credentials.database.connection'),
+        );
+
+        if (! $config->bool('credentials.database.cache.enabled')) {
+            return $store;
+        }
+
+        return new CachedCredentialStore(
+            inner: $store,
+            cache: $app->make(CacheFactory::class)->store(
+                $config->stringOrNull('credentials.database.cache.store'),
+            ),
+            ttlSeconds: $config->int('credentials.database.cache.ttl', 300),
+        );
+    }
+
+    private static function resolveProvider(CaptchaConfig $config): Provider
+    {
+        $configured = $config->stringOrNull('provider');
+
+        // An unknown name falls back to the null provider rather than throwing at boot. Throwing
+        // here takes the whole application down for a typo in a config file; the null provider is
+        // refused in production anyway, so the failure still surfaces — as blocked submissions and
+        // a logged error, not a white screen.
+        return ($configured !== null ? Provider::tryFrom($configured) : null) ?? Provider::NullProvider;
+    }
+
+    /**
      * Clear request-scoped state at both Octane boundaries.
      *
      * Listened to by event *name* rather than by importing the class: without Octane installed
@@ -333,60 +388,5 @@ final class CaptchaServiceProvider extends PackageServiceProvider
             // rule's message resolution, are honoured natively rather than reimplemented.
             static fn (string $attribute, mixed $value): bool => validator([$attribute => $value], [$attribute => [new CaptchaRule]])->passes(),
         );
-    }
-
-    /**
-     * Build the database store, or return null when it cannot be built.
-     *
-     * A misconfigured `model` — a class that does not exist, or one that does not implement the
-     * contract — degrades to the config store rather than throwing. Throwing here happens during
-     * registration, which means the application does not boot at all; for a settings-source
-     * misconfiguration that is a wildly disproportionate failure, and the doctor command reports
-     * the gap where someone will actually see it.
-     */
-    private static function makeDatabaseStore(Application $app, CaptchaConfig $config): ?CredentialStore
-    {
-        $class = $config->stringOrNull('credentials.database.model') ?? CaptchaSetting::class;
-
-        if (! class_exists($class) || ! is_subclass_of($class, ProvidesCaptchaSettings::class)) {
-            return null;
-        }
-
-        /** @var ProvidesCaptchaSettings $settings */
-        $settings = $app->make($class);
-
-        $store = new DatabaseCredentialStore(
-            settings: $settings,
-            // Resolved statically because db-tools documents this entry point as safe before its
-            // own provider has registered — which is exactly the window a credential lookup can
-            // land in during `migrate` or a console boot.
-            database: DatabaseGuard::resolve(),
-            table: $config->string('credentials.database.table', 'captcha_settings'),
-            absentRowDisables: $config->string('credentials.database.row_absent_means') === 'disabled',
-            connection: $config->stringOrNull('credentials.database.connection'),
-        );
-
-        if (! $config->bool('credentials.database.cache.enabled')) {
-            return $store;
-        }
-
-        return new CachedCredentialStore(
-            inner: $store,
-            cache: $app->make(CacheFactory::class)->store(
-                $config->stringOrNull('credentials.database.cache.store'),
-            ),
-            ttlSeconds: $config->int('credentials.database.cache.ttl', 300),
-        );
-    }
-
-    private static function resolveProvider(CaptchaConfig $config): Provider
-    {
-        $configured = $config->stringOrNull('provider');
-
-        // An unknown name falls back to the null provider rather than throwing at boot. Throwing
-        // here takes the whole application down for a typo in a config file; the null provider is
-        // refused in production anyway, so the failure still surfaces — as blocked submissions and
-        // a logged error, not a white screen.
-        return ($configured !== null ? Provider::tryFrom($configured) : null) ?? Provider::NullProvider;
     }
 }

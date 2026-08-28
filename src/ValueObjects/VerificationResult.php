@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\ValueObjects;
 
 use DateTimeImmutable;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Enums\Outcome;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 
 /**
  * The result of asking a provider about one token.
@@ -169,14 +169,14 @@ final readonly class VerificationResult
     public function toArray(): array
     {
         return [
-            'verified' => $this->verified,
-            'outcome' => $this->outcome->value,
-            'score' => $this->score,
-            'action' => $this->action,
-            'hostname' => $this->hostname,
+            'verified'     => $this->verified,
+            'outcome'      => $this->outcome->value,
+            'score'        => $this->score,
+            'action'       => $this->action,
+            'hostname'     => $this->hostname,
             'challenge_at' => $this->challengeAt?->format(DATE_ATOM),
-            'errors' => array_map(static fn (ErrorCode $e): string => $e->value, $this->errors),
-            'duration_ms' => $this->durationMs,
+            'errors'       => array_map(static fn (ErrorCode $e): string => $e->value, $this->errors),
+            'duration_ms'  => $this->durationMs,
         ];
     }
 }

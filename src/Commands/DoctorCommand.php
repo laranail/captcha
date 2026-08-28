@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Commands;
 
-use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Console\Tools\Commands\Command;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
 
 /**
@@ -44,12 +44,12 @@ final class DoctorCommand extends Command
         $this->services->display()->header('laranail/captcha');
 
         $this->services->display()->keyValue([
-            'Provider' => $provider->label() . ' (' . $provider->value . ')',
-            'Environment' => $environment,
-            'Configured' => $captcha->isConfigured() ? 'yes' : 'no',
+            'Provider'          => $provider->label() . ' (' . $provider->value . ')',
+            'Environment'       => $environment,
+            'Configured'        => $captcha->isConfigured() ? 'yes' : 'no',
             'Credential source' => $credentials->source->label(),
-            'Site key' => $this->redact($credentials->siteKey),
-            'Secret' => $credentials->secret === '' ? '(none)' : '(set, redacted)',
+            'Site key'          => $this->redact($credentials->siteKey),
+            'Secret'            => $credentials->secret === '' ? '(none)' : '(set, redacted)',
         ]);
 
         $problems = $this->problems($provider, $credentials->source, $environment, $guard, $config, $captcha);

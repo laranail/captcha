@@ -27,9 +27,9 @@ abstract class TestCase extends Orchestra
 
         $config->set('database.default', 'testing');
         $config->set('database.connections.testing', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
 
         // Tests are explicit about the environment they exercise. Leaving this at `testing`

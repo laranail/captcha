@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Assert;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
-use PHPUnit\Framework\Assert;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 
 /**

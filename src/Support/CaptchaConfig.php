@@ -90,13 +90,13 @@ final readonly class CaptchaConfig
         return array_values(array_filter($this->array($key), is_string(...)));
     }
 
-    private function raw(string $key): mixed
-    {
-        return $this->config->get(self::PREFIX . $key);
-    }
-
     public function repository(): Repository
     {
         return $this->config;
+    }
+
+    private function raw(string $key): mixed
+    {
+        return $this->config->get(self::PREFIX . $key);
     }
 }

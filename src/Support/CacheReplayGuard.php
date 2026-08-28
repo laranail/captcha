@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Support;
 
-use Illuminate\Contracts\Cache\Repository;
-use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
-use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
 use Throwable;
+use Illuminate\Contracts\Cache\Repository;
+use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
+use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
 
 /**
  * Single-use enforcement backed by the cache's atomic add.

@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Cache;
-use Simtabi\Laranail\Captcha\Adapters\Math\MathProblem;
-use Simtabi\Laranail\Captcha\Adapters\Math\ProblemGenerator;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Adapters\Math\MathProblem;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Adapters\Math\ProblemGenerator;
 
 /**
  * The self-hosted arithmetic provider.
@@ -28,9 +28,9 @@ beforeEach(function (): void {
 function answer(MathProblem $problem, int|string $value): string
 {
     return base64_encode((string) json_encode([
-        'id' => $problem->id,
-        'answer' => $value,
-        'expires' => $problem->expiresAt->getTimestamp(),
+        'id'        => $problem->id,
+        'answer'    => $value,
+        'expires'   => $problem->expiresAt->getTimestamp(),
         'signature' => $problem->signature,
     ]));
 }
@@ -39,10 +39,10 @@ function answer(MathProblem $problem, int|string $value): string
 function solveQuestion(string $question): int
 {
     $words = [
-        'zero' => '0', 'one' => '1', 'two' => '2', 'three' => '3', 'four' => '4', 'five' => '5',
-        'six' => '6', 'seven' => '7', 'eight' => '8', 'nine' => '9', 'ten' => '10',
-        'eleven' => '11', 'twelve' => '12', 'thirteen' => '13', 'fourteen' => '14',
-        'fifteen' => '15', 'sixteen' => '16', 'seventeen' => '17', 'eighteen' => '18',
+        'zero'     => '0', 'one' => '1', 'two' => '2', 'three' => '3', 'four' => '4', 'five' => '5',
+        'six'      => '6', 'seven' => '7', 'eight' => '8', 'nine' => '9', 'ten' => '10',
+        'eleven'   => '11', 'twelve' => '12', 'thirteen' => '13', 'fourteen' => '14',
+        'fifteen'  => '15', 'sixteen' => '16', 'seventeen' => '17', 'eighteen' => '18',
         'nineteen' => '19', 'twenty' => '20',
     ];
 
@@ -92,9 +92,9 @@ it('does not spend a question on a payload it never signed', function (): void {
     $problem = $captcha->issueChallenge();
 
     $forged = base64_encode((string) json_encode([
-        'id' => $problem->id,
-        'answer' => 1,
-        'expires' => $problem->expiresAt->getTimestamp(),
+        'id'        => $problem->id,
+        'answer'    => 1,
+        'expires'   => $problem->expiresAt->getTimestamp(),
         'signature' => hash_hmac('sha256', 'anything', 'the-wrong-key'),
     ]));
 
@@ -108,11 +108,11 @@ it('rejects an answer whose expiry was edited', function (): void {
     $problem = $captcha->issueChallenge();
 
     $extended = base64_encode((string) json_encode([
-        'id' => $problem->id,
+        'id'     => $problem->id,
         'answer' => solveQuestion($problem->question),
         // Expiry is covered by the signature, so moving it invalidates the payload rather than
         // extending the window.
-        'expires' => $problem->expiresAt->getTimestamp() + 86_400,
+        'expires'   => $problem->expiresAt->getTimestamp() + 86_400,
         'signature' => $problem->signature,
     ]));
 

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Concerns;
 
+use Throwable;
 use DateTimeImmutable;
-use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
-use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
+use Illuminate\Http\Client\PendingRequest;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
+use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
-use Throwable;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
  * The shared shape of a "POST the token to a siteverify endpoint" provider.
@@ -76,6 +76,25 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
         return $this->credentials->isComplete();
     }
 
+    /**
+     * Keep only string keys.
+     *
+     * A JSON body decodes to `array<mixed, mixed>` as far as the analyser is concerned, because
+     * `{"0": …}` is legal JSON and yields an integer key. Every field these APIs document is named,
+     * so anything numeric is not part of the contract and is dropped rather than reasoned about.
+     *
+     * @param array<mixed, mixed> $body
+     *
+     * @return array<string, mixed>
+     */
+    protected static function keyed(array $body): array
+    {
+        /** @var array<string, mixed> $keyed */
+        $keyed = array_filter($body, is_string(...), ARRAY_FILTER_USE_KEY);
+
+        return $keyed;
+    }
+
     /** The vendor's server-side verification endpoint. */
     abstract protected function verifyUrl(): string;
 
@@ -85,7 +104,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
     protected function payload(string $token, VerificationContext $context): array
     {
         $payload = [
-            'secret' => $this->credentials->secret,
+            'secret'   => $this->credentials->secret,
             'response' => $token,
         ];
 
@@ -139,6 +158,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
 
     /**
      * @param array<string, mixed> $body
+     *
      * @return list<ErrorCode>
      */
     protected function mapErrorCodes(array $body): array
@@ -161,11 +181,11 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
                 'invalid-input-response',
                 'bad-request',
                 'invalid-or-already-seen-response' => ErrorCode::InvalidResponse,
-                'timeout-or-duplicate' => ErrorCode::ExpiredOrDuplicate,
+                'timeout-or-duplicate'             => ErrorCode::ExpiredOrDuplicate,
                 'missing-input-secret',
                 'invalid-input-secret',
                 'invalid-keys' => ErrorCode::InvalidSecret,
-                default => ErrorCode::ProviderError,
+                default        => ErrorCode::ProviderError,
             };
         }
 
@@ -201,24 +221,6 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
         $value = $body[$key] ?? null;
 
         return is_string($value) && $value !== '' ? $value : null;
-    }
-
-    /**
-     * Keep only string keys.
-     *
-     * A JSON body decodes to `array<mixed, mixed>` as far as the analyser is concerned, because
-     * `{"0": …}` is legal JSON and yields an integer key. Every field these APIs document is named,
-     * so anything numeric is not part of the contract and is dropped rather than reasoned about.
-     *
-     * @param array<mixed, mixed> $body
-     * @return array<string, mixed>
-     */
-    protected static function keyed(array $body): array
-    {
-        /** @var array<string, mixed> $keyed */
-        $keyed = array_filter($body, is_string(...), ARRAY_FILTER_USE_KEY);
-
-        return $keyed;
     }
 
     protected function option(string $key, mixed $default = null): mixed

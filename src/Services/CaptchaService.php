@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Services;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
-use Simtabi\Laranail\Captcha\Actions\VerifyCaptcha;
+use Psr\Log\LoggerInterface;
+use Psr\Clock\ClockInterface;
+use Illuminate\Contracts\Events\Dispatcher;
 use Simtabi\Laranail\Captcha\AdapterFactory;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Testing\CaptchaFake;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\Actions\VerifyCaptcha;
+use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
 use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 use Simtabi\Laranail\Captcha\Contracts\ChallengePayload;
 use Simtabi\Laranail\Captcha\Contracts\IssuesChallenges;
-use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
-use Simtabi\Laranail\Captcha\Testing\CaptchaFake;
 use Simtabi\Laranail\Captcha\Testing\VerificationAttempt;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationPolicy;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
 
 /**
  * The package's public surface, and what the `Captcha` facade proxies to.
@@ -186,6 +186,12 @@ final class CaptchaService
         return $this;
     }
 
+    /** Undo a {@see self::fake()}, restoring the configured adapter. */
+    public function forgetAdapter(): void
+    {
+        $this->adapter = null;
+    }
+
     /** The installed fake, or a clear failure naming what was forgotten. */
     private function installedFake(): CaptchaFake
     {
@@ -198,12 +204,6 @@ final class CaptchaService
         }
 
         return $adapter;
-    }
-
-    /** Undo a {@see self::fake()}, restoring the configured adapter. */
-    public function forgetAdapter(): void
-    {
-        $this->adapter = null;
     }
 
     /**

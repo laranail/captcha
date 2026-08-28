@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Enums\Outcome;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Facades\Captcha;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 use Simtabi\Laranail\Captcha\Testing\VerificationAttempt;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
 

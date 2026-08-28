@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha;
 
 use Closure;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Illuminate\Contracts\Config\Repository;
 use Psr\Clock\ClockInterface;
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
-use Simtabi\Laranail\Captcha\Adapters\Altcha\AltchaAdapter;
-use Simtabi\Laranail\Captcha\Adapters\Math\MathCaptchaAdapter;
-use Simtabi\Laranail\Captcha\Adapters\Math\ProblemGenerator;
-use Simtabi\Laranail\Captcha\Adapters\NullProvider\NullAdapter;
+use Illuminate\Contracts\Config\Repository;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
+use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
 use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
-use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Adapters\Altcha\AltchaAdapter;
+use Simtabi\Laranail\Captcha\Adapters\Math\ProblemGenerator;
+use Simtabi\Laranail\Captcha\Adapters\Math\MathCaptchaAdapter;
+use Simtabi\Laranail\Captcha\Adapters\NullProvider\NullAdapter;
 
 /**
  * Builds the one adapter this application is configured to use.

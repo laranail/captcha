@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Commands;
 
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Console\Tools\Commands\Command;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
 
 /**

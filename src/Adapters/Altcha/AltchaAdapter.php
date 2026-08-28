@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Altcha;
 
+use Throwable;
 use DateTimeImmutable;
-use Psr\Clock\ClockInterface;
 use SensitiveParameter;
+use Psr\Clock\ClockInterface;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
 use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
 use Simtabi\Laranail\Captcha\Contracts\IssuesChallenges;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Throwable;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
  * ALTCHA — self-hosted proof-of-work. No vendor, no round trip, no cookies.
@@ -184,8 +184,8 @@ final readonly class AltchaAdapter implements CaptchaAdapter, IssuesChallenges
         return [
             'algorithm' => $payload['algorithm'],
             'challenge' => $payload['challenge'],
-            'salt' => $payload['salt'],
-            'number' => $payload['number'],
+            'salt'      => $payload['salt'],
+            'number'    => $payload['number'],
             'signature' => $payload['signature'],
         ];
     }

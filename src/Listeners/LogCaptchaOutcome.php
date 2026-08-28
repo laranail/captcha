@@ -33,11 +33,11 @@ final readonly class LogCaptchaOutcome
     public function verified(CaptchaVerified $event): void
     {
         $this->logger->debug('[laranail/captcha] verified', [
-            'provider' => $event->provider->value,
-            'outcome' => $event->result->outcome->value,
-            'score' => $event->result->score,
+            'provider'    => $event->provider->value,
+            'outcome'     => $event->result->outcome->value,
+            'score'       => $event->result->score,
             'duration_ms' => $event->result->durationMs,
-            'action' => $event->context->action,
+            'action'      => $event->context->action,
         ]);
     }
 
@@ -46,11 +46,11 @@ final readonly class LogCaptchaOutcome
         $level = $event->result->isOperatorFault() ? 'error' : $this->failureLevel;
 
         $this->logger->log($level, '[laranail/captcha] rejected', [
-            'provider' => $event->provider->value,
-            'reasons' => array_map(static fn (ErrorCode $e): string => $e->value, $event->result->errors),
-            'score' => $event->result->score,
+            'provider'    => $event->provider->value,
+            'reasons'     => array_map(static fn (ErrorCode $e): string => $e->value, $event->result->errors),
+            'score'       => $event->result->score,
             'duration_ms' => $event->result->durationMs,
-            'action' => $event->context->action,
+            'action'      => $event->context->action,
         ]);
     }
 }

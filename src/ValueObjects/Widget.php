@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\ValueObjects;
 
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Htmlable;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 
 /**

@@ -28,6 +28,28 @@ final readonly class Credentials
         public array $extra = [],
     ) {}
 
+    /**
+     * Redact the secret whenever this object is dumped.
+     *
+     * `dd($credentials)`, a Whoops or Ignition frame, a queue payload written to `failed_jobs`,
+     * and `var_dump` in a test all reach for this. The secret is the one value that must not end
+     * up in any of them — and the default behaviour is to print it in full.
+     *
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'siteKey' => $this->siteKey,
+            'secret'  => $this->secret === '' ? '' : '[redacted]',
+            'source'  => $this->source->value,
+            'extra'   => array_map(
+                static fn (string $value): string => $value === '' ? '' : '[redacted]',
+                $this->extra,
+            ),
+        ];
+    }
+
     public static function missing(): self
     {
         return new self('', '', CredentialSource::None);
@@ -44,27 +66,5 @@ final readonly class Credentials
         $value = $this->extra[$key] ?? null;
 
         return $value === null || $value === '' ? $default : $value;
-    }
-
-    /**
-     * Redact the secret whenever this object is dumped.
-     *
-     * `dd($credentials)`, a Whoops or Ignition frame, a queue payload written to `failed_jobs`,
-     * and `var_dump` in a test all reach for this. The secret is the one value that must not end
-     * up in any of them — and the default behaviour is to print it in full.
-     *
-     * @return array<string, mixed>
-     */
-    public function __debugInfo(): array
-    {
-        return [
-            'siteKey' => $this->siteKey,
-            'secret' => $this->secret === '' ? '' : '[redacted]',
-            'source' => $this->source->value,
-            'extra' => array_map(
-                static fn (string $value): string => $value === '' ? '' : '[redacted]',
-                $this->extra,
-            ),
-        ];
     }
 }

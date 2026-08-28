@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Models;
 
+use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use Simtabi\Laranail\Captcha\Contracts\ProvidesCaptchaSettings;
-use Throwable;
 
 /**
  * The shipped settings model, for applications with nowhere else to put captcha credentials.
@@ -24,18 +24,6 @@ use Throwable;
 class CaptchaSetting extends Model implements ProvidesCaptchaSettings
 {
     protected $guarded = [];
-
-    /**
-     * Encrypted at rest, because half of what lands here is a secret key.
-     *
-     * The site key is public and gains nothing from this, but splitting the column by sensitivity
-     * would mean two code paths and a schema that has to be reasoned about before every write.
-     * Encrypting the value column uniformly costs a few bytes and removes the question.
-     */
-    protected function casts(): array
-    {
-        return ['value' => 'encrypted'];
-    }
 
     public function getTable(): string
     {
@@ -64,6 +52,18 @@ class CaptchaSetting extends Model implements ProvidesCaptchaSettings
         }
 
         return $this->decrypted($row);
+    }
+
+    /**
+     * Encrypted at rest, because half of what lands here is a secret key.
+     *
+     * The site key is public and gains nothing from this, but splitting the column by sensitivity
+     * would mean two code paths and a schema that has to be reasoned about before every write.
+     * Encrypting the value column uniformly costs a few bytes and removes the question.
+     */
+    protected function casts(): array
+    {
+        return ['value' => 'encrypted'];
     }
 
     /**

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Credentials;
 
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
 use Throwable;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
+use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 
 /**
  * Tries each store in order and takes the first complete answer.

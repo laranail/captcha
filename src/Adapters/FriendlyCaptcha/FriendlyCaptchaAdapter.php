@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Adapters\FriendlyCaptcha;
 
 use Illuminate\Http\Client\Response;
-use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
 
 /**
  * Friendly Captcha v2 — invisible proof-of-work, EU-hosted, cookie-free.
@@ -44,7 +44,7 @@ final class FriendlyCaptchaAdapter extends SiteVerifyAdapter
             containerClass: 'frc-captcha',
             attributes: [
                 'data-sitekey' => $this->credentials->siteKey,
-                'data-start' => is_string($this->option('start')) ? $this->option('start') : 'focus',
+                'data-start'   => is_string($this->option('start')) ? $this->option('start') : 'focus',
             ],
             scriptUrl: self::SCRIPT_URL,
         );
@@ -61,7 +61,7 @@ final class FriendlyCaptchaAdapter extends SiteVerifyAdapter
             ->request(['X-API-Key' => $this->credentials->secret])
             ->post($this->verifyUrl(), [
                 'response' => $token,
-                'sitekey' => $this->credentials->siteKey,
+                'sitekey'  => $this->credentials->siteKey,
             ]);
     }
 
@@ -75,12 +75,12 @@ final class FriendlyCaptchaAdapter extends SiteVerifyAdapter
         $code = is_array($error) ? ($error['error_code'] ?? null) : null;
 
         return VerificationResult::failed(match ($code) {
-            'auth_required', 'auth_invalid' => ErrorCode::InvalidSecret,
-            'sitekey_invalid' => ErrorCode::InvalidSecret,
-            'response_missing' => ErrorCode::MissingResponse,
-            'response_invalid' => ErrorCode::InvalidResponse,
+            'auth_required', 'auth_invalid'          => ErrorCode::InvalidSecret,
+            'sitekey_invalid'                        => ErrorCode::InvalidSecret,
+            'response_missing'                       => ErrorCode::MissingResponse,
+            'response_invalid'                       => ErrorCode::InvalidResponse,
             'response_timeout', 'response_duplicate' => ErrorCode::ExpiredOrDuplicate,
-            default => ErrorCode::ProviderError,
+            default                                  => ErrorCode::ProviderError,
         }, raw: $body);
     }
 }

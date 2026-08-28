@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\ReCaptcha;
 
+use Throwable;
 use DateTimeImmutable;
 use Illuminate\Http\Client\Response;
-use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Support\Locale;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Throwable;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
 
 /**
  * reCAPTCHA Enterprise — the Assessment API, not siteverify.
@@ -44,7 +44,7 @@ final class EnterpriseAdapter extends SiteVerifyAdapter
             containerClass: 'g-recaptcha',
             attributes: [
                 'data-sitekey' => $this->credentials->siteKey,
-                'data-action' => is_string($this->option('action')) ? $this->option('action') : null,
+                'data-action'  => is_string($this->option('action')) ? $this->option('action') : null,
             ],
             scriptUrl: V2Adapter::SCRIPT_URL . '?render=' . rawurlencode($this->credentials->siteKey)
                 . '&hl=' . rawurlencode(
@@ -74,7 +74,7 @@ final class EnterpriseAdapter extends SiteVerifyAdapter
     protected function send(string $token, VerificationContext $context): Response
     {
         $event = [
-            'token' => $token,
+            'token'   => $token,
             'siteKey' => $this->credentials->siteKey,
         ];
 
@@ -149,12 +149,12 @@ final class EnterpriseAdapter extends SiteVerifyAdapter
     private function mapInvalidReason(?string $reason): ErrorCode
     {
         return match ($reason) {
-            'EXPIRED', 'DUPE' => ErrorCode::ExpiredOrDuplicate,
+            'EXPIRED', 'DUPE'                         => ErrorCode::ExpiredOrDuplicate,
             'MALFORMED', 'INVALID_REASON_UNSPECIFIED' => ErrorCode::InvalidResponse,
-            'SITE_MISMATCH' => ErrorCode::HostnameMismatch,
-            'MISSING' => ErrorCode::MissingResponse,
-            'BROWSER_ERROR' => ErrorCode::ProviderError,
-            default => ErrorCode::InvalidResponse,
+            'SITE_MISMATCH'                           => ErrorCode::HostnameMismatch,
+            'MISSING'                                 => ErrorCode::MissingResponse,
+            'BROWSER_ERROR'                           => ErrorCode::ProviderError,
+            default                                   => ErrorCode::InvalidResponse,
         };
     }
 }
