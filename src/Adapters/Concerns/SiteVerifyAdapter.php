@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Concerns;
 
-use Throwable;
 use DateTimeImmutable;
-use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
+use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
-use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Throwable;
 
 /**
  * The shared shape of a "POST the token to a siteverify endpoint" provider.
@@ -30,7 +30,7 @@ use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 abstract class SiteVerifyAdapter implements CaptchaAdapter
 {
     /**
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      */
     public function __construct(
         protected readonly Credentials $credentials,
@@ -83,8 +83,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
      * `{"0": …}` is legal JSON and yields an integer key. Every field these APIs document is named,
      * so anything numeric is not part of the contract and is dropped rather than reasoned about.
      *
-     * @param array<mixed, mixed> $body
-     *
+     * @param  array<mixed, mixed>  $body
      * @return array<string, mixed>
      */
     protected static function keyed(array $body): array
@@ -104,7 +103,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
     protected function payload(string $token, VerificationContext $context): array
     {
         $payload = [
-            'secret'   => $this->credentials->secret,
+            'secret' => $this->credentials->secret,
             'response' => $token,
         ];
 
@@ -131,7 +130,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
     /**
      * Normalise a successful HTTP response into a result.
      *
-     * @param array<string, mixed> $body
+     * @param  array<string, mixed>  $body
      */
     protected function mapResponse(array $body): VerificationResult
     {
@@ -157,8 +156,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
     }
 
     /**
-     * @param array<string, mixed> $body
-     *
+     * @param  array<string, mixed>  $body
      * @return list<ErrorCode>
      */
     protected function mapErrorCodes(array $body): array
@@ -181,11 +179,11 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
                 'invalid-input-response',
                 'bad-request',
                 'invalid-or-already-seen-response' => ErrorCode::InvalidResponse,
-                'timeout-or-duplicate'             => ErrorCode::ExpiredOrDuplicate,
+                'timeout-or-duplicate' => ErrorCode::ExpiredOrDuplicate,
                 'missing-input-secret',
                 'invalid-input-secret',
                 'invalid-keys' => ErrorCode::InvalidSecret,
-                default        => ErrorCode::ProviderError,
+                default => ErrorCode::ProviderError,
             };
         }
 
@@ -193,7 +191,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
     }
 
     /**
-     * @param array<string, mixed> $body
+     * @param  array<string, mixed>  $body
      */
     protected function challengeTimestamp(array $body): ?DateTimeImmutable
     {
@@ -214,7 +212,7 @@ abstract class SiteVerifyAdapter implements CaptchaAdapter
     }
 
     /**
-     * @param array<string, mixed> $body
+     * @param  array<string, mixed>  $body
      */
     protected function stringOrNull(array $body, string $key): ?string
     {

@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Services;
 
-use RuntimeException;
-use Psr\Log\LoggerInterface;
-use Psr\Clock\ClockInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use Simtabi\Laranail\Captcha\AdapterFactory;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\Testing\CaptchaFake;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Simtabi\Laranail\Captcha\Actions\VerifyCaptcha;
-use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
-use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
+use RuntimeException;
+use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
 use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Actions\VerifyCaptcha;
+use Simtabi\Laranail\Captcha\AdapterFactory;
+use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Contracts\ChallengePayload;
 use Simtabi\Laranail\Captcha\Contracts\IssuesChallenges;
+use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
+use Simtabi\Laranail\Captcha\Testing\CaptchaFake;
 use Simtabi\Laranail\Captcha\Testing\VerificationAttempt;
-use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationPolicy;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
-use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
 
 /**
  * The package's public surface, and what the `Captcha` facade proxies to.
@@ -58,7 +58,7 @@ final class CaptchaService
             // Fails closed, and loudly in the log rather than on the page. Letting this reach the
             // handler would turn a misconfiguration into a 500 on the login form, and the message
             // names the credentials involved — not something to render to a visitor.
-            $this->logger->error('[laranail/captcha] ' . $exception->getMessage());
+            $this->logger->error('[laranail/captcha] '.$exception->getMessage());
 
             return VerificationResult::failed(ErrorCode::NotConfigured);
         }
@@ -135,7 +135,7 @@ final class CaptchaService
      *
      * For a flow that verifies more than once — a retry after a failure, or a two-step form.
      *
-     * @param list<VerificationResult> $results
+     * @param  list<VerificationResult>  $results
      */
     public function fakeSequence(array $results): self
     {
@@ -153,7 +153,7 @@ final class CaptchaService
      * because that is the only place PHPUnit's `Assert` belongs: it is a dev-only dependency, and
      * importing it into a production service would make the package unusable without it.
      *
-     * @param null|callable(VerificationAttempt): bool $matching
+     * @param  null|callable(VerificationAttempt): bool  $matching
      */
     public function assertVerified(?callable $matching = null): self
     {
@@ -163,7 +163,7 @@ final class CaptchaService
     }
 
     /**
-     * @param null|callable(VerificationAttempt): bool $matching
+     * @param  null|callable(VerificationAttempt): bool  $matching
      */
     public function assertFailed(?callable $matching = null): self
     {

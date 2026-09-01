@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Credentials;
 
-use Throwable;
 use Illuminate\Contracts\Cache\Repository;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
-use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
+use Throwable;
 
 /**
  * Caches a store's answers, and is off by default on purpose.
@@ -34,7 +34,7 @@ final readonly class CachedCredentialStore implements CredentialStore
 
     public function get(Provider $provider, string $environment): ?Credentials
     {
-        $key = $this->prefix . $provider->value . ':' . $environment;
+        $key = $this->prefix.$provider->value.':'.$environment;
 
         try {
             /** @var array<string, mixed>|null $cached */
@@ -70,9 +70,9 @@ final readonly class CachedCredentialStore implements CredentialStore
     {
         return [
             'site_key' => $credentials->siteKey,
-            'secret'   => $credentials->secret,
-            'source'   => $credentials->source->value,
-            'extra'    => $credentials->extra,
+            'secret' => $credentials->secret,
+            'source' => $credentials->source->value,
+            'extra' => $credentials->extra,
         ];
     }
 
@@ -97,7 +97,7 @@ final readonly class CachedCredentialStore implements CredentialStore
     }
 
     /**
-     * @param array<string, mixed> $cached
+     * @param  array<string, mixed>  $cached
      */
     private function hydrate(array $cached): Credentials
     {

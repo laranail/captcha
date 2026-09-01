@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Blade;
-use Symfony\Component\Process\Process;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Symfony\Component\Process\Process;
 
 /**
  * Runs the emitted JavaScript, rather than asserting it was emitted.
@@ -28,7 +28,7 @@ function extractRuntime(): string
     config()->set('laranail.captcha.provider', 'turnstile');
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'site-key-abc',
-        'secret'   => 'secret-key',
+        'secret' => 'secret-key',
     ]);
 
     app()->forgetInstance(CaptchaService::class);
@@ -66,7 +66,7 @@ beforeEach(function (): void {
 });
 
 it('parses as valid JavaScript', function (): void {
-    $file = tempnam(sys_get_temp_dir(), 'captcha-runtime') . '.js';
+    $file = tempnam(sys_get_temp_dir(), 'captcha-runtime').'.js';
     file_put_contents($file, extractRuntime());
 
     $process = new Process([(string) node(), '--check', $file]);
@@ -80,16 +80,16 @@ it('parses as valid JavaScript', function (): void {
 });
 
 it('initialises, clears an expired token and resets the widget', function (): void {
-    $file = tempnam(sys_get_temp_dir(), 'captcha-runtime') . '.js';
+    $file = tempnam(sys_get_temp_dir(), 'captcha-runtime').'.js';
     file_put_contents($file, extractRuntime());
 
-    $process = new Process([(string) node(), dirname(__DIR__) . '/js/harness.mjs', $file]);
+    $process = new Process([(string) node(), dirname(__DIR__).'/js/harness.mjs', $file]);
     $process->run();
 
     @unlink($file);
 
     expect($process->getExitCode())->toBe(
         0,
-        $process->getErrorOutput() . $process->getOutput(),
+        $process->getErrorOutput().$process->getOutput(),
     );
 });

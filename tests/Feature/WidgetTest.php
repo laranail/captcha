@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Blade;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 
 function useProvider(string $provider): void
 {
     config()->set('laranail.captcha.provider', $provider);
     config()->set("laranail.captcha.environments.default.{$provider}", [
         'site_key' => 'site-key-abc',
-        'secret'   => 'secret-key',
+        'secret' => 'secret-key',
     ]);
 
     app()->forgetInstance(CaptchaService::class);
@@ -163,12 +163,12 @@ it('marks every provider that needs execution as needing it', function (): void 
 it('knows how to reset the widgets whose reset API is documented', function (Provider $provider): void {
     expect($provider->resetFunction())->not->toBeNull();
 })->with([
-    'turnstile'              => [Provider::Turnstile],
-    'hcaptcha'               => [Provider::HCaptcha],
-    'recaptcha v2'           => [Provider::ReCaptchaV2],
+    'turnstile' => [Provider::Turnstile],
+    'hcaptcha' => [Provider::HCaptcha],
+    'recaptcha v2' => [Provider::ReCaptchaV2],
     'recaptcha v2 invisible' => [Provider::ReCaptchaV2Invisible],
-    'recaptcha v3'           => [Provider::ReCaptchaV3],
-    'recaptcha enterprise'   => [Provider::ReCaptchaEnterprise],
+    'recaptcha v3' => [Provider::ReCaptchaV3],
+    'recaptcha enterprise' => [Provider::ReCaptchaEnterprise],
 ]);
 
 it('ships no default reset for the providers whose reset is not a global', function (Provider $provider): void {
@@ -180,7 +180,7 @@ it('ships no default reset for the providers whose reset is not a global', funct
     expect($provider->resetFunction())->toBeNull();
 })->with([
     'friendly captcha' => [Provider::FriendlyCaptcha],
-    'arkose'           => [Provider::Arkose],
+    'arkose' => [Provider::Arkose],
 ]);
 
 it('lets an application name its own reset for those providers', function (): void {

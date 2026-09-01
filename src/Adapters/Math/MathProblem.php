@@ -26,9 +26,9 @@ final readonly class MathProblem implements ChallengePayload
     public function toArray(): array
     {
         return [
-            'id'         => $this->id,
-            'question'   => $this->question,
-            'signature'  => $this->signature,
+            'id' => $this->id,
+            'question' => $this->question,
+            'signature' => $this->signature,
             'expires_at' => $this->expiresAt->getTimestamp(),
         ];
     }

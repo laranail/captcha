@@ -25,7 +25,7 @@ final class V2InvisibleAdapter extends V2Adapter
     {
         return [
             ...parent::widgetAttributes(),
-            'data-size'  => 'invisible',
+            'data-size' => 'invisible',
             'data-badge' => $this->stringOption('badge') ?? 'bottomright',
         ];
     }

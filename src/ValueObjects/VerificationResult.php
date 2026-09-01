@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\ValueObjects;
 
 use DateTimeImmutable;
-use Simtabi\Laranail\Captcha\Enums\Outcome;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Outcome;
 
 /**
  * The result of asking a provider about one token.
@@ -20,8 +20,8 @@ use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 final readonly class VerificationResult
 {
     /**
-     * @param list<ErrorCode> $errors
-     * @param array<string, mixed> $raw the provider's response body, never the request
+     * @param  list<ErrorCode>  $errors
+     * @param  array<string, mixed>  $raw  the provider's response body, never the request
      */
     private function __construct(
         public bool $verified,
@@ -36,7 +36,7 @@ final readonly class VerificationResult
     ) {}
 
     /**
-     * @param array<string, mixed> $raw
+     * @param  array<string, mixed>  $raw
      */
     public static function passed(
         Outcome $outcome = Outcome::Allow,
@@ -60,13 +60,13 @@ final readonly class VerificationResult
     /**
      * The only way to express a failure, and it is always terminal.
      *
-     * @param ErrorCode|list<ErrorCode> $errors
+     * @param  ErrorCode|list<ErrorCode>  $errors
      *
      * Adapters must route every failure through here — a transport error, a non-2xx status, a body
      * that did not parse. The contract is that no failure path anywhere produces a verified result
      * and no failure path throws: an exception escaping an adapter would surface as a 500 on a
      * login form, which is both a worse experience and a fingerprintable oracle.
-     * @param array<string, mixed> $raw
+     * @param  array<string, mixed>  $raw
      */
     public static function failed(
         ErrorCode|array $errors,
@@ -169,14 +169,14 @@ final readonly class VerificationResult
     public function toArray(): array
     {
         return [
-            'verified'     => $this->verified,
-            'outcome'      => $this->outcome->value,
-            'score'        => $this->score,
-            'action'       => $this->action,
-            'hostname'     => $this->hostname,
+            'verified' => $this->verified,
+            'outcome' => $this->outcome->value,
+            'score' => $this->score,
+            'action' => $this->action,
+            'hostname' => $this->hostname,
             'challenge_at' => $this->challengeAt?->format(DATE_ATOM),
-            'errors'       => array_map(static fn (ErrorCode $e): string => $e->value, $this->errors),
-            'duration_ms'  => $this->durationMs,
+            'errors' => array_map(static fn (ErrorCode $e): string => $e->value, $this->errors),
+            'duration_ms' => $this->durationMs,
         ];
     }
 }

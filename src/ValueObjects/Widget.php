@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\ValueObjects;
 
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Str;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 
 /**
@@ -23,7 +23,7 @@ use Simtabi\Laranail\Captcha\Enums\Provider;
 final readonly class Widget
 {
     /**
-     * @param array<string, string|null> $attributes rendered as `data-*` on the container
+     * @param  array<string, string|null>  $attributes  rendered as `data-*` on the container
      */
     public function __construct(
         public Provider $provider,
@@ -43,7 +43,7 @@ final readonly class Widget
      */
     public static function generateId(): string
     {
-        return 'captcha-' . Str::lower(Str::random(12));
+        return 'captcha-'.Str::lower(Str::random(12));
     }
 
     /** Attributes with the nulls dropped, ready for the blade view to escape. */

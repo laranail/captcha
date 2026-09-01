@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Captcha\Enums\Outcome;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Enums\CredentialSource;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Outcome;
 use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Credentials;
 
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Config\Repository;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
-use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
+use Illuminate\Support\Str;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
 
 /**
  * Credentials from the environment-keyed config blocks.
@@ -58,8 +58,7 @@ final readonly class ConfigCredentialStore implements CredentialStore
     }
 
     /**
-     * @param array<string, mixed> $environments
-     *
+     * @param  array<string, mixed>  $environments
      * @return array<string, mixed>
      */
     private function providerBlock(array $environments, string $environment, Provider $provider): array
@@ -97,8 +96,7 @@ final readonly class ConfigCredentialStore implements CredentialStore
      * Non-scalars are dropped rather than stringified: a nested array in a credentials block is a
      * configuration mistake, and `Array` is a worse value to carry forward than nothing.
      *
-     * @param array<string, mixed> $block
-     *
+     * @param  array<string, mixed>  $block
      * @return array<string, string>
      */
     private function stringMap(array $block): array
@@ -115,7 +113,7 @@ final readonly class ConfigCredentialStore implements CredentialStore
     }
 
     /**
-     * @param array<string, mixed> $block
+     * @param  array<string, mixed>  $block
      */
     private function stringValue(array $block, string $key): string
     {

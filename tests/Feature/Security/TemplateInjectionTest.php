@@ -19,12 +19,12 @@ use Simtabi\Laranail\Captcha\Support\Locale;
 it('drops a locale that is not a language tag', function (string $hostile): void {
     expect(Locale::sanitise($hostile))->toBeNull();
 })->with([
-    'blade echo'          => '{{ 7*7 }}',
-    'blade raw echo'      => '{!! 7*7 !!}',
-    'blade directive'     => '@php echo 49; @endphp',
+    'blade echo' => '{{ 7*7 }}',
+    'blade raw echo' => '{!! 7*7 !!}',
+    'blade directive' => '@php echo 49; @endphp',
     'attribute break-out' => '" onload="alert(1)',
-    'tag break-out'       => '"></script><script>alert(1)</script>',
-    'path traversal'      => '../../../../etc/passwd',
+    'tag break-out' => '"></script><script>alert(1)</script>',
+    'path traversal' => '../../../../etc/passwd',
 ]);
 
 it('strips a trailing null byte rather than carrying it into a URL', function (): void {

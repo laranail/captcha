@@ -97,6 +97,6 @@ final readonly class CaptchaConfig
 
     private function raw(string $key): mixed
     {
-        return $this->config->get(self::PREFIX . $key);
+        return $this->config->get(self::PREFIX.$key);
     }
 }

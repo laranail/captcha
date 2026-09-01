@@ -25,8 +25,8 @@ final class UnsafeCaptchaConfiguration extends RuntimeException
     {
         return new self(sprintf(
             'The [%s] provider is resolving the published test keys in production, which verify '
-            . 'every token. Set real credentials for this environment, or set '
-            . 'laranail.captcha.credentials.test_keys.enabled to false to fail loudly instead.',
+            .'every token. Set real credentials for this environment, or set '
+            .'laranail.captcha.credentials.test_keys.enabled to false to fail loudly instead.',
             $provider->value,
         ));
     }
@@ -35,8 +35,8 @@ final class UnsafeCaptchaConfiguration extends RuntimeException
     {
         return new self(
             'The [null] captcha provider is active in production and accepts every submission. '
-            . 'Choose a real provider, or set laranail.captcha.providers.null.allow_in_production '
-            . 'to true if this environment is deliberately unprotected.',
+            .'Choose a real provider, or set laranail.captcha.providers.null.allow_in_production '
+            .'to true if this environment is deliberately unprotected.',
         );
     }
 }

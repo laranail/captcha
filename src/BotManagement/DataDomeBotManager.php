@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\BotManagement;
 
-use Throwable;
-use SensitiveParameter;
-use Illuminate\Http\Request;
 use Illuminate\Http\Client\Factory;
-use Simtabi\Laranail\Captcha\Enums\BotDecision;
+use Illuminate\Http\Request;
+use SensitiveParameter;
 use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
+use Simtabi\Laranail\Captcha\Enums\BotDecision;
+use Throwable;
 
 /**
  * DataDome's Protection API, as the reference adapter for the edge tier.
@@ -63,10 +63,10 @@ final readonly class DataDomeBotManager implements BotManagementAdapter
         }
 
         return match ($response->status()) {
-            403      => BotDecision::Block,
-            401      => BotDecision::Challenge,
+            403 => BotDecision::Block,
+            401 => BotDecision::Challenge,
             301, 302 => BotDecision::Redirect,
-            default  => BotDecision::Allow,
+            default => BotDecision::Allow,
         };
     }
 
@@ -93,24 +93,24 @@ final readonly class DataDomeBotManager implements BotManagementAdapter
     private function describe(Request $request): array
     {
         return array_filter([
-            'Key'               => $this->serverKey,
+            'Key' => $this->serverKey,
             'RequestModuleName' => 'laranail/captcha',
-            'ModuleVersion'     => '0.1',
-            'ServerName'        => $this->truncate($request->server('SERVER_NAME'), 512),
-            'IP'                => $this->truncate($request->ip(), 128),
-            'Port'              => $this->truncate($request->server('REMOTE_PORT'), 8),
-            'TimeRequest'       => (string) (int) (microtime(true) * 1_000_000),
-            'Protocol'          => $request->isSecure() ? 'https' : 'http',
-            'Method'            => $request->method(),
-            'Request'           => $this->truncate($request->getRequestUri(), 2048),
-            'HeadersList'       => $this->truncate(implode(',', array_keys($request->headers->all())), 512),
-            'Host'              => $this->truncate($request->getHost(), 512),
-            'UserAgent'         => $this->truncate($request->userAgent(), 768),
-            'Referer'           => $this->truncate($request->header('referer'), 1024),
-            'Accept'            => $this->truncate($request->header('accept'), 512),
-            'AcceptEncoding'    => $this->truncate($request->header('accept-encoding'), 128),
-            'AcceptLanguage'    => $this->truncate($request->header('accept-language'), 256),
-            'ClientID'          => $this->truncate($request->cookie('datadome'), 128),
+            'ModuleVersion' => '0.1',
+            'ServerName' => $this->truncate($request->server('SERVER_NAME'), 512),
+            'IP' => $this->truncate($request->ip(), 128),
+            'Port' => $this->truncate($request->server('REMOTE_PORT'), 8),
+            'TimeRequest' => (string) (int) (microtime(true) * 1_000_000),
+            'Protocol' => $request->isSecure() ? 'https' : 'http',
+            'Method' => $request->method(),
+            'Request' => $this->truncate($request->getRequestUri(), 2048),
+            'HeadersList' => $this->truncate(implode(',', array_keys($request->headers->all())), 512),
+            'Host' => $this->truncate($request->getHost(), 512),
+            'UserAgent' => $this->truncate($request->userAgent(), 768),
+            'Referer' => $this->truncate($request->header('referer'), 1024),
+            'Accept' => $this->truncate($request->header('accept'), 512),
+            'AcceptEncoding' => $this->truncate($request->header('accept-encoding'), 128),
+            'AcceptLanguage' => $this->truncate($request->header('accept-language'), 256),
+            'ClientID' => $this->truncate($request->cookie('datadome'), 128),
         ], static fn (mixed $value): bool => $value !== '');
     }
 

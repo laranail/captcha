@@ -15,7 +15,7 @@ use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
 final readonly class VerificationPolicy
 {
     /**
-     * @param list<string> $allowedHostnames
+     * @param  list<string>  $allowedHostnames
      */
     public function __construct(
         public bool $enforceHostname = true,

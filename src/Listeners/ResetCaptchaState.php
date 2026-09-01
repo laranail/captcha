@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Listeners;
 
-use Throwable;
 use Illuminate\Contracts\Foundation\Application;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Throwable;
 
 /**
  * Clears the state that must not survive a request under Octane.

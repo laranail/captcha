@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\ReCaptcha;
 
+use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Support\Locale;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
 
 /**
  * reCAPTCHA v2, the checkbox.
@@ -50,14 +50,14 @@ class V2Adapter extends SiteVerifyAdapter
     {
         return [
             'data-sitekey' => $this->credentials->siteKey,
-            'data-theme'   => $this->stringOption('theme'),
-            'data-size'    => $this->stringOption('size'),
+            'data-theme' => $this->stringOption('theme'),
+            'data-size' => $this->stringOption('size'),
         ];
     }
 
     protected function scriptUrl(): string
     {
-        return self::SCRIPT_URL . '?hl=' . rawurlencode(
+        return self::SCRIPT_URL.'?hl='.rawurlencode(
             Locale::sanitise($this->stringOption('language')) ?? 'en',
         );
     }

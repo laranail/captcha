@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use AltchaOrg\Altcha\V1\Altcha as ReferenceAltcha;
-use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use AltchaOrg\Altcha\V1\ChallengeOptions as ReferenceChallengeOptions;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
 
 /**
  * Wire compatibility with the reference implementation, proved in both directions.
@@ -39,7 +39,7 @@ function solveFor(string $algorithm, string $salt, string $target, int $maxNumbe
     $php = ['SHA-256' => 'sha256', 'SHA-384' => 'sha384', 'SHA-512' => 'sha512'][$algorithm];
 
     for ($candidate = 0; $candidate <= $maxNumber; $candidate++) {
-        if (hash($php, $salt . $candidate) === $target) {
+        if (hash($php, $salt.$candidate) === $target) {
             return $candidate;
         }
     }
@@ -60,8 +60,8 @@ it('issues a challenge the reference implementation accepts', function (): void 
     $payload = [
         'algorithm' => $challenge->algorithm,
         'challenge' => $challenge->challenge,
-        'number'    => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, $challenge->maxNumber),
-        'salt'      => $challenge->salt,
+        'number' => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, $challenge->maxNumber),
+        'salt' => $challenge->salt,
         'signature' => $challenge->signature,
     ];
 
@@ -84,8 +84,8 @@ it('accepts a challenge the reference implementation issued', function (): void 
     $payload = encodePayload([
         'algorithm' => $challenge->algorithm,
         'challenge' => $challenge->challenge,
-        'number'    => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, 5_000),
-        'salt'      => $challenge->salt,
+        'number' => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, 5_000),
+        'salt' => $challenge->salt,
         'signature' => $challenge->signature,
     ]);
 
@@ -100,8 +100,8 @@ it('rejects a reference challenge signed with a different key', function (): voi
     $payload = encodePayload([
         'algorithm' => $challenge->algorithm,
         'challenge' => $challenge->challenge,
-        'number'    => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, 2_000),
-        'salt'      => $challenge->salt,
+        'number' => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, 2_000),
+        'salt' => $challenge->salt,
         'signature' => $challenge->signature,
     ]);
 
@@ -128,8 +128,8 @@ it('refuses a challenge that carries no expiry', function (): void {
     $payload = encodePayload([
         'algorithm' => $challenge->algorithm,
         'challenge' => $challenge->challenge,
-        'number'    => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, 1_000),
-        'salt'      => $challenge->salt,
+        'number' => solveFor($challenge->algorithm, $challenge->salt, $challenge->challenge, 1_000),
+        'salt' => $challenge->salt,
         'signature' => $challenge->signature,
     ]);
 

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Events\Dispatcher;
-use Simtabi\Laranail\Captcha\Facades\Captcha;
-use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Illuminate\Support\Facades\Log;
 use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Facades\Captcha;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
 
 /**
  * The two things that only go wrong on someone else's infrastructure.
@@ -81,5 +81,5 @@ it('never writes the token to a log line', function (): void {
 
     // The token is a live credential until it is spent, and a log aggregator is a far softer
     // target than the session it protects.
-    Log::shouldNotHaveReceived('log', fn (string $level, string $message, array $context): bool => str_contains(json_encode($context) . $message, 'a-very-secret-looking-token'));
+    Log::shouldNotHaveReceived('log', fn (string $level, string $message, array $context): bool => str_contains(json_encode($context).$message, 'a-very-secret-looking-token'));
 });

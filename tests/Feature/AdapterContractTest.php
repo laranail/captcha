@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Simtabi\Laranail\Captcha\AdapterFactory;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Illuminate\Http\Client\ConnectionException;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
@@ -29,10 +29,10 @@ beforeEach(function (): void {
 
     foreach (httpProviders() as $provider) {
         $credentials[$provider->value] = [
-            'site_key'   => 'site-key',
-            'secret'     => 'secret-key',
+            'site_key' => 'site-key',
+            'secret' => 'secret-key',
             'project_id' => 'demo-project',
-            'client'     => 'demo',
+            'client' => 'demo',
         ];
     }
 
@@ -131,15 +131,15 @@ it('passes a genuine success through', function (Provider $provider, array $body
 
     expect($result->verified)->toBeTrue();
 })->with([
-    'turnstile'        => [Provider::Turnstile, ['success' => true, 'hostname' => 'example.com']],
-    'hcaptcha'         => [Provider::HCaptcha, ['success' => true]],
-    'recaptcha v2'     => [Provider::ReCaptchaV2, ['success' => true]],
-    'recaptcha v3'     => [Provider::ReCaptchaV3, ['success' => true, 'score' => 0.9, 'action' => 'login']],
+    'turnstile' => [Provider::Turnstile, ['success' => true, 'hostname' => 'example.com']],
+    'hcaptcha' => [Provider::HCaptcha, ['success' => true]],
+    'recaptcha v2' => [Provider::ReCaptchaV2, ['success' => true]],
+    'recaptcha v3' => [Provider::ReCaptchaV3, ['success' => true, 'score' => 0.9, 'action' => 'login']],
     'friendly captcha' => [Provider::FriendlyCaptcha, ['success' => true]],
-    'arkose'           => [Provider::Arkose, ['session_details' => ['solved' => true]]],
-    'enterprise'       => [Provider::ReCaptchaEnterprise, [
+    'arkose' => [Provider::Arkose, ['session_details' => ['solved' => true]]],
+    'enterprise' => [Provider::ReCaptchaEnterprise, [
         'tokenProperties' => ['valid' => true, 'action' => 'login', 'hostname' => 'example.com'],
-        'riskAnalysis'    => ['score' => 0.8],
+        'riskAnalysis' => ['score' => 0.8],
     ]],
 ]);
 

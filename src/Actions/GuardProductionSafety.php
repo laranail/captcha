@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Actions;
 
-use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Enums\CredentialSource;
-use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
+use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
+use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
 
 /**
  * Refuse a configuration that would verify everything in production.
@@ -25,7 +25,7 @@ use Simtabi\Laranail\Captcha\Exceptions\UnsafeCaptchaConfiguration;
 final readonly class GuardProductionSafety
 {
     /**
-     * @param list<string> $productionEnvironments
+     * @param  list<string>  $productionEnvironments
      */
     public function __construct(
         private array $productionEnvironments = ['production', 'prod'],

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Actions;
 
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 
 /**
  * Resolve one provider's keys for the environment this application is running as.

@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Enums;
 
-use Simtabi\Laranail\Enumerator\Attributes\Label;
-use Simtabi\Laranail\Captcha\Support\ResponseField;
-use Simtabi\Laranail\Enumerator\Contracts\Enumerator;
-use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
-use Simtabi\Laranail\Enumerator\Attributes\Description;
-use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\V2Adapter;
-use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\V3Adapter;
 use Simtabi\Laranail\Captcha\Adapters\Altcha\AltchaAdapter;
 use Simtabi\Laranail\Captcha\Adapters\Arkose\ArkoseAdapter;
-use Simtabi\Laranail\Captcha\Adapters\Math\MathCaptchaAdapter;
-use Simtabi\Laranail\Captcha\Adapters\HCaptcha\HCaptchaAdapter;
-use Simtabi\Laranail\Captcha\Adapters\NullProvider\NullAdapter;
-use Simtabi\Laranail\Enumerator\Concerns\HasEnumeratorBehavior;
-use Simtabi\Laranail\Captcha\Adapters\Turnstile\TurnstileAdapter;
-use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\EnterpriseAdapter;
-use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\V2InvisibleAdapter;
 use Simtabi\Laranail\Captcha\Adapters\FriendlyCaptcha\FriendlyCaptchaAdapter;
+use Simtabi\Laranail\Captcha\Adapters\HCaptcha\HCaptchaAdapter;
+use Simtabi\Laranail\Captcha\Adapters\Math\MathCaptchaAdapter;
+use Simtabi\Laranail\Captcha\Adapters\NullProvider\NullAdapter;
+use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\EnterpriseAdapter;
+use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\V2Adapter;
+use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\V2InvisibleAdapter;
+use Simtabi\Laranail\Captcha\Adapters\ReCaptcha\V3Adapter;
+use Simtabi\Laranail\Captcha\Adapters\Turnstile\TurnstileAdapter;
+use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
+use Simtabi\Laranail\Captcha\Support\ResponseField;
+use Simtabi\Laranail\Enumerator\Attributes\Description;
+use Simtabi\Laranail\Enumerator\Attributes\Label;
+use Simtabi\Laranail\Enumerator\Concerns\HasEnumeratorBehavior;
+use Simtabi\Laranail\Enumerator\Contracts\Enumerator;
 
 /**
  * The providers this package can be configured to use, one at a time.
@@ -87,17 +87,17 @@ enum Provider: string implements Enumerator
     public function adapter(): string
     {
         return match ($this) {
-            self::Turnstile            => TurnstileAdapter::class,
-            self::HCaptcha             => HCaptchaAdapter::class,
-            self::ReCaptchaV2          => V2Adapter::class,
+            self::Turnstile => TurnstileAdapter::class,
+            self::HCaptcha => HCaptchaAdapter::class,
+            self::ReCaptchaV2 => V2Adapter::class,
             self::ReCaptchaV2Invisible => V2InvisibleAdapter::class,
-            self::ReCaptchaV3          => V3Adapter::class,
-            self::ReCaptchaEnterprise  => EnterpriseAdapter::class,
-            self::FriendlyCaptcha      => FriendlyCaptchaAdapter::class,
-            self::Arkose               => ArkoseAdapter::class,
-            self::Altcha               => AltchaAdapter::class,
-            self::Math                 => MathCaptchaAdapter::class,
-            self::NullProvider         => NullAdapter::class,
+            self::ReCaptchaV3 => V3Adapter::class,
+            self::ReCaptchaEnterprise => EnterpriseAdapter::class,
+            self::FriendlyCaptcha => FriendlyCaptchaAdapter::class,
+            self::Arkose => ArkoseAdapter::class,
+            self::Altcha => AltchaAdapter::class,
+            self::Math => MathCaptchaAdapter::class,
+            self::NullProvider => NullAdapter::class,
         };
     }
 
@@ -113,16 +113,16 @@ enum Provider: string implements Enumerator
     {
         return match ($this) {
             self::Turnstile => 'cf-turnstile-response',
-            self::HCaptcha  => 'h-captcha-response',
+            self::HCaptcha => 'h-captcha-response',
             self::ReCaptchaV2,
             self::ReCaptchaV2Invisible,
             self::ReCaptchaV3,
             self::ReCaptchaEnterprise => 'g-recaptcha-response',
-            self::FriendlyCaptcha     => 'frc-captcha-response',
-            self::Arkose              => 'arkose-token',
-            self::Altcha              => 'altcha',
-            self::Math                => 'captcha-answer',
-            self::NullProvider        => 'null-captcha-response',
+            self::FriendlyCaptcha => 'frc-captcha-response',
+            self::Arkose => 'arkose-token',
+            self::Altcha => 'altcha',
+            self::Math => 'captcha-answer',
+            self::NullProvider => 'null-captcha-response',
         };
     }
 
@@ -169,12 +169,12 @@ enum Provider: string implements Enumerator
     {
         return match ($this) {
             self::Turnstile => 'turnstile.reset',
-            self::HCaptcha  => 'hcaptcha.reset',
+            self::HCaptcha => 'hcaptcha.reset',
             self::ReCaptchaV2,
             self::ReCaptchaV2Invisible,
             self::ReCaptchaV3,
             self::ReCaptchaEnterprise => 'grecaptcha.reset',
-            default                   => null,
+            default => null,
         };
     }
 
@@ -203,7 +203,7 @@ enum Provider: string implements Enumerator
             self::ReCaptchaV2Invisible,
             self::ReCaptchaV3,
             self::ReCaptchaEnterprise => 'recaptcha',
-            default                   => $this->value,
+            default => $this->value,
         };
     }
 }

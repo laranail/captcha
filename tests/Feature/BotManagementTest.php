@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Client\ConnectionException;
-use Simtabi\Laranail\Captcha\Enums\BotDecision;
-use Simtabi\Laranail\Captcha\Events\BotRequestBlocked;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 use Simtabi\Laranail\Captcha\BotManagement\NullBotManager;
 use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
+use Simtabi\Laranail\Captcha\Enums\BotDecision;
+use Simtabi\Laranail\Captcha\Events\BotRequestBlocked;
 use Simtabi\Laranail\Captcha\Http\Middleware\ProtectAgainstBots;
 
 /**

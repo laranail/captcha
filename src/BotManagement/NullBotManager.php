@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\BotManagement;
 
 use Illuminate\Http\Request;
-use Simtabi\Laranail\Captcha\Enums\BotDecision;
 use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
+use Simtabi\Laranail\Captcha\Enums\BotDecision;
 
 /**
  * Bot management, switched off.

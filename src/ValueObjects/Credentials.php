@@ -17,8 +17,8 @@ use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 final readonly class Credentials
 {
     /**
-     * @param array<string, string> $extra provider-specific values: an Enterprise project id, an
-     *                                     Arkose client subdomain, a Friendly Captcha region
+     * @param  array<string, string>  $extra  provider-specific values: an Enterprise project id, an
+     *                                        Arkose client subdomain, a Friendly Captcha region
      */
     public function __construct(
         public string $siteKey,
@@ -41,9 +41,9 @@ final readonly class Credentials
     {
         return [
             'siteKey' => $this->siteKey,
-            'secret'  => $this->secret === '' ? '' : '[redacted]',
-            'source'  => $this->source->value,
-            'extra'   => array_map(
+            'secret' => $this->secret === '' ? '' : '[redacted]',
+            'source' => $this->source->value,
+            'extra' => array_map(
                 static fn (string $value): string => $value === '' ? '' : '[redacted]',
                 $this->extra,
             ),

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Enums;
 
-use Simtabi\Laranail\Enumerator\Attributes\Label;
-use Simtabi\Laranail\Enumerator\Contracts\Enumerator;
 use Simtabi\Laranail\Enumerator\Attributes\Description;
+use Simtabi\Laranail\Enumerator\Attributes\Label;
 use Simtabi\Laranail\Enumerator\Concerns\HasEnumeratorBehavior;
+use Simtabi\Laranail\Enumerator\Contracts\Enumerator;
 
 /**
  * Why a verification failed, normalised across every provider.
@@ -94,6 +94,6 @@ enum ErrorCode: string implements Enumerator
     /** The translation key carrying the visitor-facing message for this failure. */
     public function translationKey(): string
     {
-        return 'laranail-captcha::validation.' . $this->value;
+        return 'laranail-captcha::validation.'.$this->value;
     }
 }

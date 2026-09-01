@@ -45,7 +45,7 @@ it('protects a form end to end without a single line of javascript', function ()
     // Exactly what a browser posts: two ordinary form fields, recombined server-side.
     $request = request()->merge([
         'captcha_challenge' => html_entity_decode($challenge[1]),
-        'captcha_answer'    => (string) $answer,
+        'captcha_answer' => (string) $answer,
     ]);
 
     app()->instance('request', $request);
@@ -60,7 +60,7 @@ it('still rejects a form submitted with the wrong answer', function (): void {
 
     $request = request()->merge([
         'captcha_challenge' => html_entity_decode($challenge[1]),
-        'captcha_answer'    => '999999',
+        'captcha_answer' => '999999',
     ]);
 
     app()->instance('request', $request);
@@ -79,10 +79,10 @@ it('rejects a form that skipped the captcha entirely', function (): void {
 function solveRenderedQuestion(string $question): int
 {
     $words = [
-        'zero'     => '0', 'one' => '1', 'two' => '2', 'three' => '3', 'four' => '4', 'five' => '5',
-        'six'      => '6', 'seven' => '7', 'eight' => '8', 'nine' => '9', 'ten' => '10',
-        'eleven'   => '11', 'twelve' => '12', 'thirteen' => '13', 'fourteen' => '14',
-        'fifteen'  => '15', 'sixteen' => '16', 'seventeen' => '17', 'eighteen' => '18',
+        'zero' => '0', 'one' => '1', 'two' => '2', 'three' => '3', 'four' => '4', 'five' => '5',
+        'six' => '6', 'seven' => '7', 'eight' => '8', 'nine' => '9', 'ten' => '10',
+        'eleven' => '11', 'twelve' => '12', 'thirteen' => '13', 'fourteen' => '14',
+        'fifteen' => '15', 'sixteen' => '16', 'seventeen' => '17', 'eighteen' => '18',
         'nineteen' => '19', 'twenty' => '20',
     ];
 
