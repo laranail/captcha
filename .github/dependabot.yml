@@ -28,16 +28,6 @@ updates:
   # The browser suite's only dependency. It is test-only and never ships — /tests is
   # export-ignored — but an unmaintained Playwright silently stops matching current Chromium,
   # and nothing else here would raise it.
-  - package-ecosystem: npm
-    directory: "/tests/Browser"
-    schedule:
-      interval: weekly
-      day: monday
-      time: "06:00"
-      timezone: America/New_York
-    open-pull-requests-limit: 3
-    labels: [dependencies, ci]
-
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
