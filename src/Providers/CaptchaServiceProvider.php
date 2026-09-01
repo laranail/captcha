@@ -4,55 +4,55 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Providers;
 
-use Override;
-use Psr\Log\LoggerInterface;
-use Psr\Clock\ClockInterface;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
-use Simtabi\Laranail\Package\Tools\Package;
-use Simtabi\Laranail\Captcha\AdapterFactory;
-use Simtabi\Laranail\Captcha\Enums\Provider;
 use Illuminate\Contracts\Foundation\Application;
-use Simtabi\Laranail\Captcha\View\Components\Js;
-use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
-use Simtabi\Laranail\Captcha\Support\SystemClock;
-use Simtabi\Laranail\DbTools\Guard\DatabaseGuard;
 use Illuminate\Http\Client\Factory as HttpFactory;
-use Simtabi\Laranail\Captcha\Commands\KeysCommand;
-use Simtabi\Laranail\Captcha\Events\CaptchaFailed;
-use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
-use Simtabi\Laranail\Captcha\Models\CaptchaSetting;
-use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
-use Simtabi\Laranail\Captcha\Commands\DoctorCommand;
-use Simtabi\Laranail\Captcha\Events\CaptchaVerified;
-use Simtabi\Laranail\Captcha\Commands\InstallCommand;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
-use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
-use Simtabi\Laranail\Captcha\Support\CacheReplayGuard;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\View\Components\Container;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
+use Override;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
+use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
 use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\AdapterFactory;
+use Simtabi\Laranail\Captcha\BotManagement\DataDomeBotManager;
+use Simtabi\Laranail\Captcha\BotManagement\NullBotManager;
 use Simtabi\Laranail\Captcha\Commands\CacheClearCommand;
+use Simtabi\Laranail\Captcha\Commands\DoctorCommand;
+use Simtabi\Laranail\Captcha\Commands\InstallCommand;
+use Simtabi\Laranail\Captcha\Commands\KeysCommand;
+use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
+use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Contracts\ProvidesCaptchaSettings;
+use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
+use Simtabi\Laranail\Captcha\Credentials\CachedCredentialStore;
+use Simtabi\Laranail\Captcha\Credentials\ChainCredentialStore;
+use Simtabi\Laranail\Captcha\Credentials\ConfigCredentialStore;
+use Simtabi\Laranail\Captcha\Credentials\DatabaseCredentialStore;
+use Simtabi\Laranail\Captcha\Credentials\TestKeyCredentialStore;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Events\CaptchaFailed;
+use Simtabi\Laranail\Captcha\Events\CaptchaVerified;
+use Simtabi\Laranail\Captcha\Http\Controllers\ChallengeController;
 use Simtabi\Laranail\Captcha\Listeners\LogCaptchaOutcome;
 use Simtabi\Laranail\Captcha\Listeners\ResetCaptchaState;
-use Simtabi\Laranail\Captcha\BotManagement\NullBotManager;
+use Simtabi\Laranail\Captcha\Models\CaptchaSetting;
 use Simtabi\Laranail\Captcha\Rules\Captcha as CaptchaRule;
-use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
-use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Support\CacheReplayGuard;
+use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
+use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
+use Simtabi\Laranail\Captcha\Support\SystemClock;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationPolicy;
-use Simtabi\Laranail\Captcha\BotManagement\DataDomeBotManager;
-use Simtabi\Laranail\Captcha\Credentials\ChainCredentialStore;
-use Simtabi\Laranail\Captcha\Contracts\ProvidesCaptchaSettings;
-use Simtabi\Laranail\Captcha\Credentials\CachedCredentialStore;
-use Simtabi\Laranail\Captcha\Credentials\ConfigCredentialStore;
-use Simtabi\Laranail\Captcha\Credentials\TestKeyCredentialStore;
-use Simtabi\Laranail\Captcha\Credentials\DatabaseCredentialStore;
-use Simtabi\Laranail\Captcha\Http\Controllers\ChallengeController;
-use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
 use Simtabi\Laranail\Captcha\View\Components\Captcha as CaptchaComponent;
+use Simtabi\Laranail\Captcha\View\Components\Container;
+use Simtabi\Laranail\Captcha\View\Components\Js;
+use Simtabi\Laranail\DbTools\Guard\DatabaseGuard;
+use Simtabi\Laranail\Package\Tools\Package;
+use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
 
 final class CaptchaServiceProvider extends PackageServiceProvider
 {
@@ -70,8 +70,8 @@ final class CaptchaServiceProvider extends PackageServiceProvider
             // `<x-captcha-container />`. Keeping them is what makes the migration a namespace
             // change rather than a sweep through every blade file.
             ->hasBladeComponentAliases([
-                'captcha'           => CaptchaComponent::class,
-                'captcha-js'        => Js::class,
+                'captcha' => CaptchaComponent::class,
+                'captcha-js' => Js::class,
                 'captcha-container' => Container::class,
             ])
             ->hasCommands([
@@ -359,7 +359,7 @@ final class CaptchaServiceProvider extends PackageServiceProvider
         $path = $config->stringOrNull('challenge.route');
         $throttle = $config->stringOrNull('challenge.rate_limit');
 
-        Route::middleware(is_string($throttle) && $throttle !== '' ? ['throttle:' . $throttle] : [])
+        Route::middleware(is_string($throttle) && $throttle !== '' ? ['throttle:'.$throttle] : [])
             ->get(
                 is_string($path) && $path !== '' ? $path : '/captcha/challenge',
                 ChallengeController::class,

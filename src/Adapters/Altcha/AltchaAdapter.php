@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Altcha;
 
-use Throwable;
 use DateTimeImmutable;
-use SensitiveParameter;
 use Psr\Clock\ClockInterface;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
+use SensitiveParameter;
 use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
 use Simtabi\Laranail\Captcha\Contracts\IssuesChallenges;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Throwable;
 
 /**
  * ALTCHA — self-hosted proof-of-work. No vendor, no round trip, no cookies.
@@ -73,10 +73,10 @@ final readonly class AltchaAdapter implements CaptchaAdapter, IssuesChallenges
         // salt, and because the salt is hashed, a salt without it produces a different challenge
         // and a different signature. Omitting it means no ALTCHA-based server can verify anything
         // we issue — which the conformance suite catches, and nothing else would.
-        $salt = bin2hex(random_bytes(12)) . '?expires=' . $expiresAt->getTimestamp() . '&';
+        $salt = bin2hex(random_bytes(12)).'?expires='.$expiresAt->getTimestamp().'&';
 
         $number = random_int(0, $this->maxNumber);
-        $challenge = $this->hash($salt . $number);
+        $challenge = $this->hash($salt.$number);
 
         return new Challenge(
             algorithm: $this->algorithm,
@@ -113,7 +113,7 @@ final readonly class AltchaAdapter implements CaptchaAdapter, IssuesChallenges
             return VerificationResult::failed(ErrorCode::Stale);
         }
 
-        $expectedChallenge = $this->hash($salt . $number, $algorithm);
+        $expectedChallenge = $this->hash($salt.$number, $algorithm);
 
         if (! hash_equals($expectedChallenge, $challenge)
             || ! hash_equals($this->sign($expectedChallenge, $algorithm), $signature)) {
@@ -184,8 +184,8 @@ final readonly class AltchaAdapter implements CaptchaAdapter, IssuesChallenges
         return [
             'algorithm' => $payload['algorithm'],
             'challenge' => $payload['challenge'],
-            'salt'      => $payload['salt'],
-            'number'    => $payload['number'],
+            'salt' => $payload['salt'],
+            'number' => $payload['number'],
             'signature' => $payload['signature'],
         ];
     }
@@ -208,7 +208,7 @@ final readonly class AltchaAdapter implements CaptchaAdapter, IssuesChallenges
             return true;
         }
 
-        return (new DateTimeImmutable('@' . $expires)) < $this->clock->now();
+        return (new DateTimeImmutable('@'.$expires)) < $this->clock->now();
     }
 
     private function hash(string $value, ?string $algorithm = null): string

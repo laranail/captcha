@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Arkose;
 
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
 
 /**
  * Arkose Labs (FunCaptcha) Verify v4.
@@ -39,7 +39,7 @@ final class ArkoseAdapter extends SiteVerifyAdapter
             instanceId: $instanceId,
             containerClass: 'arkose-captcha',
             attributes: ['data-sitekey' => $this->credentials->siteKey],
-            scriptUrl: self::SCRIPT_HOST . '/v2/' . rawurlencode($this->credentials->siteKey) . '/api.js',
+            scriptUrl: self::SCRIPT_HOST.'/v2/'.rawurlencode($this->credentials->siteKey).'/api.js',
         );
     }
 
@@ -59,7 +59,7 @@ final class ArkoseAdapter extends SiteVerifyAdapter
     protected function payload(string $token, VerificationContext $context): array
     {
         return [
-            'private_key'   => $this->credentials->secret,
+            'private_key' => $this->credentials->secret,
             'session_token' => $token,
         ];
     }

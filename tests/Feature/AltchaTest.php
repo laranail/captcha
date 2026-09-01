@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Psr\Clock\ClockInterface;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\ValueObjects\Challenge;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
@@ -29,7 +29,7 @@ function solve(Challenge $challenge, ?int $number = null): string
 {
     $number ??= (function () use ($challenge): int {
         for ($candidate = 0; $candidate <= $challenge->maxNumber; $candidate++) {
-            if (hash('sha256', $challenge->salt . $candidate) === $challenge->challenge) {
+            if (hash('sha256', $challenge->salt.$candidate) === $challenge->challenge) {
                 return $candidate;
             }
         }
@@ -40,8 +40,8 @@ function solve(Challenge $challenge, ?int $number = null): string
     return base64_encode((string) json_encode([
         'algorithm' => $challenge->algorithm,
         'challenge' => $challenge->challenge,
-        'number'    => $number,
-        'salt'      => $challenge->salt,
+        'number' => $number,
+        'salt' => $challenge->salt,
         'signature' => $challenge->signature,
     ]));
 }
@@ -83,7 +83,7 @@ it('rejects a challenge this server never signed', function (): void {
     $forged = new Challenge(
         algorithm: 'SHA-256',
         challenge: hash('sha256', 'forged-salt0'),
-        salt: 'forged-salt?expires=' . (time() + 300),
+        salt: 'forged-salt?expires='.(time() + 300),
         signature: hash_hmac('sha256', hash('sha256', 'forged-salt0'), 'the-wrong-key'),
         maxNumber: 10,
         expiresAt: new DateTimeImmutable('+5 minutes'),
@@ -114,11 +114,11 @@ it('rejects a challenge that has expired', function (): void {
 it('rejects a payload that is not a challenge at all', function (string $payload): void {
     expect(app(CaptchaService::class)->verify($payload, VerificationContext::none())->passes())->toBeFalse();
 })->with([
-    'not base64'             => 'this is not base64 %%%',
-    'base64 but not json'    => base64_encode('plain text'),
+    'not base64' => 'this is not base64 %%%',
+    'base64 but not json' => base64_encode('plain text'),
     'json but not an object' => base64_encode('[1,2,3]'),
-    'object missing fields'  => base64_encode('{"algorithm":"SHA-256"}'),
-    'unknown algorithm'      => base64_encode('{"algorithm":"MD5","challenge":"x","salt":"y","number":1,"signature":"z"}'),
+    'object missing fields' => base64_encode('{"algorithm":"SHA-256"}'),
+    'unknown algorithm' => base64_encode('{"algorithm":"MD5","challenge":"x","salt":"y","number":1,"signature":"z"}'),
 ]);
 
 it('serves a fresh challenge over http and never caches it', function (): void {

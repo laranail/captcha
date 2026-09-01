@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Simtabi\Laranail\Captcha\AdapterFactory;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
@@ -24,9 +24,9 @@ use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
  */
 function liveAdapter(Provider $provider, string $siteKey, string $secret): object
 {
-    config()->set('laranail.captcha.environments.default.' . $provider->value, [
+    config()->set('laranail.captcha.environments.default.'.$provider->value, [
         'site_key' => $siteKey,
-        'secret'   => $secret,
+        'secret' => $secret,
     ]);
 
     app()->forgetInstance(CredentialStore::class);

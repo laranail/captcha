@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Credentials;
 
-use Throwable;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
-use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
+use Throwable;
 
 /**
  * Tries each store in order and takes the first complete answer.
@@ -23,7 +23,7 @@ use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 final readonly class ChainCredentialStore implements CredentialStore
 {
     /**
-     * @param list<CredentialStore> $stores
+     * @param  list<CredentialStore>  $stores
      */
     public function __construct(private array $stores) {}
 

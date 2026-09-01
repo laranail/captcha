@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Turnstile;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\PendingRequest;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Illuminate\Http\Client\Response;
 use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
 
 final class TurnstileAdapter extends SiteVerifyAdapter
 {
@@ -30,13 +30,13 @@ final class TurnstileAdapter extends SiteVerifyAdapter
             containerClass: 'cf-turnstile',
             attributes: [
                 'data-sitekey' => $this->credentials->siteKey,
-                'data-theme'   => $this->stringOption('theme'),
-                'data-size'    => $this->stringOption('size'),
+                'data-theme' => $this->stringOption('theme'),
+                'data-size' => $this->stringOption('size'),
                 // The locale Turnstile actually reads. The package this replaces documented
                 // locale support "via the container component" and then never emitted this
                 // attribute, so the setting did nothing for the default provider.
                 'data-language' => $this->stringOption('language'),
-                'data-action'   => $this->stringOption('action'),
+                'data-action' => $this->stringOption('action'),
             ],
             scriptUrl: self::SCRIPT_URL,
         );

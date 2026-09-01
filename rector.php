@@ -7,8 +7,8 @@ use Rector\Set\ValueObject\LevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__.'/src',
+        __DIR__.'/tests',
     ])
     // Pinned to the php84 set, matching the ^8.4.1 floor. The pin is the point rather
     // than the level: it stops anything 8.5-only slipping in from a developer's newer
@@ -23,6 +23,6 @@ return RectorConfig::configure()
         typeDeclarations: true,
     )
     ->withSkip([
-        __DIR__ . '/tests/Fixtures',
+        __DIR__.'/tests/Fixtures',
     ])
     ->withImportNames(removeUnusedImports: true);

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Contracts\ChallengePayload;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**

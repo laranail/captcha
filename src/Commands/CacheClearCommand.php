@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Commands;
 
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
 use Simtabi\Laranail\Console\Tools\Commands\Command;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
 
 /**
@@ -48,7 +48,7 @@ final class CacheClearCommand extends Command
         $cleared = 0;
 
         foreach (Provider::cases() as $provider) {
-            if ($store->forget('laranail:captcha:credentials:' . $provider->value . ':' . $environment)) {
+            if ($store->forget('laranail:captcha:credentials:'.$provider->value.':'.$environment)) {
                 $cleared++;
             }
         }

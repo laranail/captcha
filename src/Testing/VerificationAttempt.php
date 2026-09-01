@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Testing;
 
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
 
 /**
  * One call to `verify()`, as the fake saw it.

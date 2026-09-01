@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Rules;
 
 use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Http\Request;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Simtabi\Laranail\Captcha\Support\ResponseField;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Support\ResponseField;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\View\Components;
 
-use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Support\Locale;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Illuminate\View\Component;
 use Simtabi\Laranail\Captcha\Adapters\Math\MathProblem;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Support\Locale;
 
 /**
  * `<x-captcha />` — the whole thing, in one tag.
@@ -54,36 +54,36 @@ final class Captcha extends Component
         }
 
         return view('laranail-captcha::components.captcha', [
-            'widget'           => $widget,
+            'widget' => $widget,
             'widgetAttributes' => $attributes,
-            'scriptUrl'        => $widget->scriptUrl,
+            'scriptUrl' => $widget->scriptUrl,
             // reCAPTCHA v3 and v2-invisible have nothing to click: the token only exists once
             // `grecaptcha.execute()` has run. A container alone renders an empty div and the form
             // submits with no captcha at all — which is why this is wired here rather than left
             // as an instruction in the docs.
             'executesOnSubmit' => $captcha->provider()->requiresExplicitExecution(),
-            'siteKey'          => $attributes['data-sitekey'] ?? null,
-            'action'           => $attributes['data-action'] ?? 'submit',
+            'siteKey' => $attributes['data-sitekey'] ?? null,
+            'action' => $attributes['data-action'] ?? 'submit',
             // Per-instance configuration travels as data attributes and the runtime is emitted
             // once per page, rather than a copy of the script per widget. Two widgets on a page
             // would otherwise install two MutationObservers and two morph hooks, and each would
             // process the other's container.
             'runtime' => [
-                'provider'     => $captcha->provider()->value,
-                'reset'        => $this->resetFunction($captcha->provider()),
-                'skipMorph'    => $captcha->provider()->hasLiveVendorState(),
-                'selfHosted'   => $captcha->provider()->isSelfHosted(),
+                'provider' => $captcha->provider()->value,
+                'reset' => $this->resetFunction($captcha->provider()),
+                'skipMorph' => $captcha->provider()->hasLiveVendorState(),
+                'selfHosted' => $captcha->provider()->isSelfHosted(),
                 'challengeUrl' => $widget->attributes()['data-challenge-url']
                     ?? $widget->attributes()['challengeurl']
                     ?? null,
             ],
-            'lang'           => Locale::sanitise($this->lang),
-            'nonce'          => $this->nonce,
-            'problem'        => $challenge instanceof MathProblem ? $challenge : null,
+            'lang' => Locale::sanitise($this->lang),
+            'nonce' => $this->nonce,
+            'problem' => $challenge instanceof MathProblem ? $challenge : null,
             'challengeToken' => $challenge instanceof MathProblem
                 ? base64_encode((string) json_encode([
-                    'id'        => $challenge->id,
-                    'expires'   => $challenge->expiresAt->getTimestamp(),
+                    'id' => $challenge->id,
+                    'expires' => $challenge->expiresAt->getTimestamp(),
                     'signature' => $challenge->signature,
                 ]))
                 : null,
@@ -105,7 +105,7 @@ final class Captcha extends Component
      */
     private function resetFunction(Provider $provider): ?string
     {
-        $configured = config('laranail.captcha.providers.' . $provider->optionsKey() . '.reset_function');
+        $configured = config('laranail.captcha.providers.'.$provider->optionsKey().'.reset_function');
 
         return is_string($configured) && $configured !== '' ? $configured : $provider->resetFunction();
     }

@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\Math;
 
-use Throwable;
 use DateTimeImmutable;
-use SensitiveParameter;
-use Psr\Clock\ClockInterface;
 use Illuminate\Contracts\Cache\Repository;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
-use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Psr\Clock\ClockInterface;
+use SensitiveParameter;
 use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Contracts\ChallengePayload;
 use Simtabi\Laranail\Captcha\Contracts\IssuesChallenges;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Throwable;
 
 /**
  * A math captcha that is actually worth deploying.
@@ -65,7 +65,7 @@ final readonly class MathCaptchaAdapter implements CaptchaAdapter, IssuesChallen
 
         // The answer is the only copy, and it is server-side and short-lived. The TTL is the
         // expiry plus a little, so a challenge cannot outlive the entry that validates it.
-        $this->cache->put($this->prefix . $id, $answer, $this->expiresAfterSeconds + 30);
+        $this->cache->put($this->prefix.$id, $answer, $this->expiresAfterSeconds + 30);
 
         return new MathProblem(
             id: $id,
@@ -95,13 +95,13 @@ final readonly class MathCaptchaAdapter implements CaptchaAdapter, IssuesChallen
             return VerificationResult::failed(ErrorCode::InvalidResponse);
         }
 
-        if ((new DateTimeImmutable('@' . $expires)) < $this->clock->now()) {
+        if ((new DateTimeImmutable('@'.$expires)) < $this->clock->now()) {
             return VerificationResult::failed(ErrorCode::Stale);
         }
 
         // Pulled, not read. This single line is what makes the small answer space safe: the
         // question is spent on this attempt whether or not the answer is right.
-        $expected = $this->cache->pull($this->prefix . $id);
+        $expected = $this->cache->pull($this->prefix.$id);
 
         if (! is_int($expected)) {
             // Either already answered, or expired out of the cache. Both mean the same thing to
@@ -177,15 +177,15 @@ final readonly class MathCaptchaAdapter implements CaptchaAdapter, IssuesChallen
         }
 
         return [
-            'id'        => $payload['id'],
-            'answer'    => trim((string) $answer),
-            'expires'   => $payload['expires'],
+            'id' => $payload['id'],
+            'answer' => trim((string) $answer),
+            'expires' => $payload['expires'],
             'signature' => $payload['signature'],
         ];
     }
 
     private function sign(string $id, int $expires): string
     {
-        return hash_hmac('sha256', $id . '|' . $expires, $this->hmacKey);
+        return hash_hmac('sha256', $id.'|'.$expires, $this->hmacKey);
     }
 }

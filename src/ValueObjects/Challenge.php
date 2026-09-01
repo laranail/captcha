@@ -40,7 +40,7 @@ final readonly class Challenge implements ChallengePayload
         return [
             'algorithm' => $this->algorithm,
             'challenge' => $this->challenge,
-            'salt'      => $this->salt,
+            'salt' => $this->salt,
             'signature' => $this->signature,
             'maxnumber' => $this->maxNumber,
         ];

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Events\Dispatcher;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
+use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
 use Simtabi\Laranail\Captcha\Enums\BotDecision;
 use Simtabi\Laranail\Captcha\Events\BotRequestBlocked;
-use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
