@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Commands;
 
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Console\Tools\Commands\Command;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
 
 /**
@@ -55,7 +55,7 @@ final class KeysCommand extends Command
             ];
         }
 
-        $this->services->display()->header('Credentials · '.$resolveCredentials->environment());
+        $this->services->display()->header('Credentials · ' . $resolveCredentials->environment());
         $this->services->display()->displayTable(['Provider', 'Source', 'State', 'Site key'], $rows);
 
         return self::SUCCESS;
@@ -65,6 +65,6 @@ final class KeysCommand extends Command
     {
         return $value === ''
             ? '—'
-            : mb_substr($value, 0, 6).str_repeat('*', max(0, mb_strlen($value) - 6));
+            : mb_substr($value, 0, 6) . str_repeat('*', max(0, mb_strlen($value) - 6));
     }
 }

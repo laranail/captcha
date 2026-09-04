@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha;
 
 use Closure;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Illuminate\Contracts\Config\Repository;
 use Psr\Clock\ClockInterface;
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
-use Simtabi\Laranail\Captcha\Adapters\Altcha\AltchaAdapter;
-use Simtabi\Laranail\Captcha\Adapters\Math\MathCaptchaAdapter;
-use Simtabi\Laranail\Captcha\Adapters\Math\ProblemGenerator;
-use Simtabi\Laranail\Captcha\Adapters\NullProvider\NullAdapter;
+use Illuminate\Contracts\Config\Repository;
+use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
+use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
 use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\Contracts\ChallengeStore;
-use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\Support\CaptchaConfig;
-use Simtabi\Laranail\Captcha\Support\CaptchaHttp;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Adapters\Altcha\AltchaAdapter;
+use Simtabi\Laranail\Captcha\Adapters\Math\ProblemGenerator;
+use Simtabi\Laranail\Captcha\Adapters\Math\MathCaptchaAdapter;
+use Simtabi\Laranail\Captcha\Adapters\NullProvider\NullAdapter;
 
 /**
  * Builds the one adapter this application is configured to use.
@@ -47,7 +47,7 @@ final class AdapterFactory
     ) {}
 
     /**
-     * @param  Closure(): CaptchaAdapter  $factory
+     * @param Closure(): CaptchaAdapter $factory
      */
     public function extend(string $name, Closure $factory): void
     {
@@ -98,7 +98,7 @@ final class AdapterFactory
      * silently change the meaning of the other. Deriving also means the self-hosted providers work
      * on a fresh install with nothing configured, which is the point of offering them.
      *
-     * @param  array<string, mixed>  $options
+     * @param array<string, mixed> $options
      */
     private function signingKey(array $options): string
     {
@@ -121,7 +121,7 @@ final class AdapterFactory
     }
 
     /**
-     * @param  array<string, mixed>  $options
+     * @param array<string, mixed> $options
      */
     private function intOption(array $options, string $key, int $default): int
     {
@@ -139,7 +139,7 @@ final class AdapterFactory
     private function optionsFor(Provider $provider): array
     {
         $widget = $this->settings->map('widget');
-        $options = $this->settings->map('providers.'.$provider->optionsKey());
+        $options = $this->settings->map('providers.' . $provider->optionsKey());
 
         // Widget defaults first, so theme, size and language are set once for whichever provider
         // is active and a provider block only has to name what it does differently.

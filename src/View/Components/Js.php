@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\View\Components;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Illuminate\Contracts\View\View;
 use Simtabi\Laranail\Captcha\Support\Locale;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
 
 /**
  * `<x-captcha-js />` — the active provider's script tag.
@@ -37,8 +37,8 @@ final class Js extends Component
 
         return view('laranail-captcha::components.js', [
             'scriptUrl' => $widget->scriptUrl,
-            'nonce' => $this->nonce,
-            'lang' => Locale::sanitise($this->lang),
+            'nonce'     => $this->nonce,
+            'lang'      => Locale::sanitise($this->lang),
         ]);
     }
 }
