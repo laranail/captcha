@@ -30,9 +30,9 @@ interface ProvidesCaptchaSettings
      * `credentials.database.row_absent_means` setting, and it matters: falling back to a stale
      * `.env` secret after an operator deleted the row would defeat the deletion.
      *
-     * @param  string  $provider  the {@see Provider} value
-     * @param  string  $key  `site_key`, `secret`, or a provider-specific extra
-     * @param  string  $environment  the resolved deployment environment
+     * @param string $provider the {@see Provider} value
+     * @param string $key `site_key`, `secret`, or a provider-specific extra
+     * @param string $environment the resolved deployment environment
      */
     public function captchaSetting(string $provider, string $key, string $environment): ?string;
 }

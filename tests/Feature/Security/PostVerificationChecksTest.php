@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Http;
 use Psr\Clock\ClockInterface;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Illuminate\Support\Facades\Http;
 use Simtabi\Laranail\Captcha\Enums\Outcome;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
@@ -22,7 +22,7 @@ beforeEach(function (): void {
     config()->set('laranail.captcha.provider', 'turnstile');
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'site-key',
-        'secret' => 'secret-key',
+        'secret'   => 'secret-key',
     ]);
 
     freezeClockAt('2026-08-12T12:00:00+00:00');
@@ -54,8 +54,8 @@ function captcha(): CaptchaService
 function turnstileAnswers(array $overrides = []): void
 {
     Http::fake(fn () => Http::response([
-        'success' => true,
-        'hostname' => 'example.com',
+        'success'      => true,
+        'hostname'     => 'example.com',
         'challenge_ts' => '2026-08-12T11:59:30+00:00',
         ...$overrides,
     ], 200));

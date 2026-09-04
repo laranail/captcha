@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Blade;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Symfony\Component\Process\Process;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 
 /**
  * Runs the widget in a real browser.
@@ -28,7 +28,7 @@ use Symfony\Component\Process\Process;
  */
 function browserDir(): string
 {
-    return dirname(__DIR__).'/Browser';
+    return dirname(__DIR__) . '/Browser';
 }
 
 /**
@@ -40,7 +40,7 @@ function browserDir(): string
 function writeFixture(string $name, string $provider, array $credentials): void
 {
     config()->set('laranail.captcha.provider', $provider);
-    config()->set('laranail.captcha.environments.default.'.$provider, $credentials);
+    config()->set('laranail.captcha.environments.default.' . $provider, $credentials);
 
     app()->forgetInstance(CaptchaService::class);
     app()->forgetInstance(CredentialStore::class);
@@ -57,18 +57,18 @@ function writeFixture(string $name, string $provider, array $credentials): void
     <body>{$body}</body></html>
     HTML;
 
-    $dir = browserDir().'/.tmp';
+    $dir = browserDir() . '/.tmp';
 
     if (! is_dir($dir)) {
         mkdir($dir, 0755, true);
     }
 
-    file_put_contents($dir.'/'.$name.'.html', $html);
+    file_put_contents($dir . '/' . $name . '.html', $html);
 }
 
 function playwright(): ?Process
 {
-    if (! is_dir(browserDir().'/node_modules/@playwright')) {
+    if (! is_dir(browserDir() . '/node_modules/@playwright')) {
         return null;
     }
 
@@ -82,7 +82,7 @@ beforeEach(function (): void {
         // `npm install`, not `ci` — this family does not commit lock files.
         test()->markTestSkipped(
             'Playwright is not installed. Run `npm --prefix tests/Browser install` '
-            .'then `npx --prefix tests/Browser playwright install chromium`.',
+            . 'then `npx --prefix tests/Browser playwright install chromium`.',
         );
     }
 });
@@ -95,7 +95,7 @@ beforeEach(function (): void {
  * a mismatch. This is not hypothetical: four deliberate breaks to the runtime were all reported
  * green by a standalone Playwright run before this existed.
  *
- * @param  list<string>  $pages
+ * @param list<string> $pages
  */
 function writeManifest(array $pages): void
 {
@@ -105,11 +105,11 @@ function writeManifest(array $pages): void
         'resources/views/components/captcha.blade.php',
         'src/View/Components/Captcha.php',
     ] as $file) {
-        $sources[$file] = hash_file('sha256', dirname(__DIR__, 2).'/'.$file);
+        $sources[$file] = hash_file('sha256', dirname(__DIR__, 2) . '/' . $file);
     }
 
     file_put_contents(
-        browserDir().'/.tmp/manifest.json',
+        browserDir() . '/.tmp/manifest.json',
         (string) json_encode(['pages' => $pages, 'sources' => $sources], JSON_PRETTY_PRINT),
     );
 }
@@ -129,6 +129,6 @@ it('drives the rendered widget in a real browser', function (): void {
 
     expect($process->getExitCode())->toBe(
         0,
-        $process->getOutput().$process->getErrorOutput(),
+        $process->getOutput() . $process->getErrorOutput(),
     );
 })->group('browser');

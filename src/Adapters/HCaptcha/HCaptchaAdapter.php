@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\HCaptcha;
 
-use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Support\Locale;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\Adapters\Concerns\SiteVerifyAdapter;
 
 final class HCaptchaAdapter extends SiteVerifyAdapter
 {
@@ -36,10 +36,10 @@ final class HCaptchaAdapter extends SiteVerifyAdapter
             containerClass: 'h-captcha',
             attributes: [
                 'data-sitekey' => $this->credentials->siteKey,
-                'data-theme' => $this->stringOption('theme'),
-                'data-size' => $this->stringOption('size'),
+                'data-theme'   => $this->stringOption('theme'),
+                'data-size'    => $this->stringOption('size'),
             ],
-            scriptUrl: self::SCRIPT_URL.'?hl='.rawurlencode(
+            scriptUrl: self::SCRIPT_URL . '?hl=' . rawurlencode(
                 Locale::sanitise($this->stringOption('language')) ?? 'en',
             ),
         );

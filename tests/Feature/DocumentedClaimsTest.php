@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Assert;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
-use PHPUnit\Framework\Assert;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 
 /**
@@ -30,10 +30,10 @@ function docFiles(): array
     $root = dirname(__DIR__, 2);
 
     return [
-        $root.'/README.md',
-        ...glob($root.'/docs/*.md'),
-        ...glob($root.'/docs/tools/*.md'),
-        ...glob($root.'/docs/recipes/*.md'),
+        $root . '/README.md',
+        ...glob($root . '/docs/*.md'),
+        ...glob($root . '/docs/tools/*.md'),
+        ...glob($root . '/docs/recipes/*.md'),
     ];
 }
 
@@ -77,7 +77,7 @@ it('names no publish tag that does not exist', function (): void {
 });
 
 it('names no publish tag the install command cannot use', function (): void {
-    $source = (string) file_get_contents(dirname(__DIR__, 2).'/src/Commands/InstallCommand.php');
+    $source = (string) file_get_contents(dirname(__DIR__, 2) . '/src/Commands/InstallCommand.php');
 
     expect(array_diff(matchesIn('/laranail::captcha-[a-z-]+/', $source), publishTags()))->toBe([]);
 });
@@ -97,7 +97,7 @@ it('names no provider that is not a case of the enum', function (): void {
     // Scoped to the fenced `CAPTCHA_PROVIDER=` lines and the providers table, because prose uses
     // the same words as ordinary English — "math", "null" — and matching those would be noise.
     $documented = matchesIn('/(?<=^\| `)[a-z0-9-]+(?=`)/m', (string) file_get_contents(
-        dirname(__DIR__, 2).'/docs/providers.md',
+        dirname(__DIR__, 2) . '/docs/providers.md',
     ));
 
     expect($documented)->not->toBeEmpty()
@@ -105,12 +105,12 @@ it('names no provider that is not a case of the enum', function (): void {
 });
 
 it('documents every provider the enum offers', function (): void {
-    $providers = (string) file_get_contents(dirname(__DIR__, 2).'/docs/providers.md');
+    $providers = (string) file_get_contents(dirname(__DIR__, 2) . '/docs/providers.md');
 
     // The other direction. A provider added to the enum and never written up is invisible to
     // anyone choosing one, which is the only moment the list matters.
     foreach (Provider::cases() as $provider) {
-        expect($providers)->toContain('`'.$provider->value.'`');
+        expect($providers)->toContain('`' . $provider->value . '`');
     }
 });
 
@@ -141,7 +141,7 @@ it('names no test group that matches nothing', function (): void {
     $tagged = '';
 
     $files = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($root.'/tests', FilesystemIterator::SKIP_DOTS),
+        new RecursiveDirectoryIterator($root . '/tests', FilesystemIterator::SKIP_DOTS),
     );
 
     foreach ($files as $file) {
@@ -154,7 +154,7 @@ it('names no test group that matches nothing', function (): void {
         static fn (string $flag): string => (string) preg_replace('/.*=/', '', $flag),
         [
             ...matchesIn('/--group=[a-z,]+/', docText()),
-            ...matchesIn('/--exclude-group=[a-z,]+/', (string) file_get_contents($root.'/.github/workflows/tests.yml')),
+            ...matchesIn('/--exclude-group=[a-z,]+/', (string) file_get_contents($root . '/.github/workflows/tests.yml')),
         ],
     );
 
@@ -168,7 +168,7 @@ it('names no test group that matches nothing', function (): void {
         // so a message passed as a second argument becomes a second required substring. This test
         // failed on exactly that before anyone read the message it was supposedly printing.
         Assert::assertStringContainsString(
-            "'".$group."'",
+            "'" . $group . "'",
             $tagged,
             "No test carries the [{$group}] group, but the docs or CI name it.",
         );

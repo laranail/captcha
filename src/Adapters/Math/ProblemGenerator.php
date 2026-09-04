@@ -24,8 +24,8 @@ namespace Simtabi\Laranail\Captcha\Adapters\Math;
 final readonly class ProblemGenerator
 {
     private const array WORDS = [
-        0 => 'zero', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five',
-        6 => 'six', 7 => 'seven', 8 => 'eight', 9 => 'nine', 10 => 'ten',
+        0  => 'zero', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five',
+        6  => 'six', 7 => 'seven', 8 => 'eight', 9 => 'nine', 10 => 'ten',
         11 => 'eleven', 12 => 'twelve', 13 => 'thirteen', 14 => 'fourteen', 15 => 'fifteen',
         16 => 'sixteen', 17 => 'seventeen', 18 => 'eighteen', 19 => 'nineteen', 20 => 'twenty',
     ];
@@ -38,8 +38,8 @@ final readonly class ProblemGenerator
     public function generate(): array
     {
         return match (max(1, min(3, $this->difficulty))) {
-            1 => $this->twoTerms(),
-            2 => $this->threeTerms(),
+            1       => $this->twoTerms(),
+            2       => $this->threeTerms(),
             default => $this->parenthesised(),
         };
     }
@@ -111,7 +111,7 @@ final readonly class ProblemGenerator
     private function render(int $a, string $operator, int $b): string
     {
         $spelled = match ($operator) {
-            '+' => random_int(0, 2) === 0 ? 'plus' : '+',
+            '+'     => random_int(0, 2) === 0 ? 'plus' : '+',
             default => random_int(0, 2) === 0 ? 'minus' : '−',
         };
 

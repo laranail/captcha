@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Models;
 
+use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use Simtabi\Laranail\Captcha\Contracts\ProvidesCaptchaSettings;
-use Throwable;
 
 /**
  * The shipped settings model, for applications with nowhere else to put captcha credentials.

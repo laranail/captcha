@@ -36,7 +36,7 @@ final readonly class CaptchaHttp
     ) {}
 
     /**
-     * @param  array<string, string>  $headers
+     * @param array<string, string> $headers
      */
     public function request(array $headers = []): PendingRequest
     {
@@ -55,7 +55,7 @@ final readonly class CaptchaHttp
      * Only safe when the request carries something that lets the provider recognise the retry as
      * the same attempt. Never widen this to providers that do not.
      *
-     * @param  array<string, string>  $headers
+     * @param array<string, string> $headers
      */
     public function retryable(array $headers = []): PendingRequest
     {
