@@ -307,7 +307,10 @@ return [
     |
     */
     'widget' => [
-        'theme'    => env('CAPTCHA_THEME', 'auto'),
+        'theme' => env('CAPTCHA_THEME', 'auto'),
+        // normal | compact | flexible. `flexible` fills the parent container's
+        // width. Passed through verbatim - there is no allowlist, so a value the
+        // provider adds works without a release here.
         'size'     => env('CAPTCHA_SIZE', 'normal'),
         'language' => env('CAPTCHA_LOCALE'),
 

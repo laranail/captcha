@@ -1,0 +1,35 @@
+# GitGuardian configuration.
+#
+# One finding, and it is a true positive about the *shape* and a false positive about the *fact*:
+# `src/Credentials/TestKeyCredentialStore.php` carries Google's published reCAPTCHA v2 test key
+# pair, which really is a structurally valid reCAPTCHA secret, so the detector is right to match it.
+#
+# It is not a credential of ours to leak. Google documents that pair for exactly this purpose, it is
+# identical in every project that uses it, and it grants nothing: the key verifies *any* token, so
+# possessing it buys an attacker nothing they could not get by reading Google's own testing page.
+# The danger it carries is the opposite one — an application reaching production still using it and
+# looking configured while accepting everything — and that is guarded in code by
+# `GuardProductionSafety`, which refuses to verify when the resolved source is this store and the
+# environment is production.
+#
+# It is excluded rather than removed because the value IS the feature. `TestKeyCredentialStore`
+# exists to return that exact published pair so a fresh checkout works with no setup; substituting
+# a different string would leave a class that no longer does the one thing it is named for. Where a
+# finding could be removed instead of suppressed, it was: see `laranail/paypal` and
+# `laranail/password-tools`, where the same sweep rewrote the fixtures rather than ignoring them.
+#
+# Nothing is excluded by path. If a finding appears outside the entry below, treat it as real.
+
+version: 2
+
+secret:
+  ignored_matches:
+    # Google's published reCAPTCHA v2 test secret. Documented at
+    # https://developers.google.com/recaptcha/docs/faq -- "What should I do if I'm getting the
+    # error 'localhost is not in the list of supported domains'?"
+    - name: Google's published reCAPTCHA v2 always-pass test secret (TestKeyCredentialStore)
+      match: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+  ignored_paths:
+    - vendor/**
+    - .phpunit.cache/**
