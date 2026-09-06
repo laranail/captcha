@@ -16,6 +16,19 @@ third-party dependency is acceptable.
 `data-theme`, `data-size`, `data-action`, and `data-language` — the last of which the package this
 replaced documented and never emitted, so the locale setting did nothing for its default provider.
 
+Every one is passed through verbatim from config, with no allowlist, so a value Cloudflare adds
+works here the day they ship it without a release from us.
+
+| Setting | Values | |
+|---|---|---|
+| `size` | `normal` · `compact` · `flexible` | `flexible` fills the parent container's width |
+| `theme` | `auto` · `light` · `dark` | |
+
+**For a full-width widget set `size` to `flexible`** — via `CAPTCHA_SIZE=flexible`, the
+`captcha.widget.size` config key, or per-widget with `<x-captcha-container size="flexible" />`.
+Turnstile sizes itself to the container, so the container also needs a width; it is not a fixed
+`100%` on the widget itself.
+
 ## The one retry in the package
 
 Turnstile is the only adapter that retries a failed verification, because it is the only one where
