@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Credentials;
 
-use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Captcha\ValueObjects\Credentials;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
 
 /**
  * The providers' own published always-pass keys, so a fresh checkout works with no setup.
@@ -39,24 +39,24 @@ final readonly class TestKeyCredentialStore implements CredentialStore
     private const array KEYS = [
         'turnstile' => [
             'site_key' => '1x00000000000000000000AA',
-            'secret' => '1x0000000000000000000000000000000AA',
+            'secret'   => '1x0000000000000000000000000000000AA',
         ],
         'hcaptcha' => [
             'site_key' => '10000000-ffff-ffff-ffff-000000000001',
-            'secret' => '0x0000000000000000000000000000000000000000',
+            'secret'   => '0x0000000000000000000000000000000000000000',
         ],
         'recaptcha-v2' => [
             'site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-            'secret' => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+            'secret'   => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
         ],
         'recaptcha-v2-invisible' => [
             'site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-            'secret' => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+            'secret'   => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
         ],
     ];
 
     /**
-     * @param  list<string>  $allowedEnvironments
+     * @param list<string> $allowedEnvironments
      */
     public function __construct(
         private bool $enabled = true,

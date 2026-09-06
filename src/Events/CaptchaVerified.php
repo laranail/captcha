@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Events;
 
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
  * A submission passed every check.

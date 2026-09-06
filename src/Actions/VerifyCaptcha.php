@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Actions;
 
 use DateTimeImmutable;
-use Illuminate\Contracts\Events\Dispatcher;
 use Psr\Clock\ClockInterface;
-use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
-use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
+use Illuminate\Contracts\Events\Dispatcher;
 use Simtabi\Laranail\Captcha\Enums\Outcome;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Events\CaptchaFailed;
+use Simtabi\Laranail\Captcha\Contracts\ReplayGuard;
 use Simtabi\Laranail\Captcha\Events\CaptchaVerified;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
+use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationPolicy;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
  * Verify one token and apply every check that is the same for every provider.

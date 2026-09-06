@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\Adapters\ReCaptcha;
 
-use Simtabi\Laranail\Captcha\Actions\VerifyCaptcha;
 use Simtabi\Laranail\Captcha\Enums\Provider;
+use Simtabi\Laranail\Captcha\Actions\VerifyCaptcha;
 
 /**
  * reCAPTCHA v3 — score only, never interrupts.
@@ -30,12 +30,12 @@ final class V3Adapter extends V2Adapter
     {
         return [
             'data-sitekey' => $this->credentials->siteKey,
-            'data-action' => $this->stringOption('action'),
+            'data-action'  => $this->stringOption('action'),
         ];
     }
 
     protected function scriptUrl(): string
     {
-        return self::SCRIPT_URL.'?render='.rawurlencode($this->credentials->siteKey);
+        return self::SCRIPT_URL . '?render=' . rawurlencode($this->credentials->siteKey);
     }
 }

@@ -23,13 +23,13 @@ abstract class TestCase extends Orchestra
         // AES-256 key by construction, so secret scanners flag it — correctly, by their rules.
         // Generating it here removes the detector surface and nothing is lost: no test asserts
         // a fixed key. The encrypted settings cast needs a real key to round-trip.
-        $config->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+        $config->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
 
         $config->set('database.default', 'testing');
         $config->set('database.connections.testing', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
 
         // Tests are explicit about the environment they exercise. Leaving this at `testing`
@@ -47,7 +47,7 @@ abstract class TestCase extends Orchestra
      */
     protected function defineDatabaseMigrations(): void
     {
-        $migration = require dirname(__DIR__).'/database/migrations/create_captcha_settings_table.php.stub';
+        $migration = require dirname(__DIR__) . '/database/migrations/create_captcha_settings_table.php.stub';
 
         $migration->up();
     }
