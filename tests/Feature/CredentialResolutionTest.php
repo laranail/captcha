@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
-use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Models\CaptchaSetting;
+use Simtabi\Laranail\Captcha\Enums\CredentialSource;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 
 /**
  * The resolution order the package promises: database, then config, then test keys.
@@ -19,7 +19,7 @@ beforeEach(function (): void {
     config()->set('laranail.captcha.credentials.database.enabled', true);
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'config-site-key',
-        'secret' => 'config-secret',
+        'secret'   => 'config-secret',
     ]);
 
     app()->forgetInstance(CredentialStore::class);
@@ -28,10 +28,10 @@ beforeEach(function (): void {
 function setting(string $environment, string $key, string $value): void
 {
     CaptchaSetting::query()->create([
-        'provider' => 'turnstile',
+        'provider'    => 'turnstile',
         'environment' => $environment,
-        'key' => $key,
-        'value' => $value,
+        'key'         => $key,
+        'value'       => $value,
     ]);
 }
 

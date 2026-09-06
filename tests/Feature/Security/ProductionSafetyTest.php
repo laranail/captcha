@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
-use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Illuminate\Support\Facades\Http;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
+use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
 
 /**
  * The two ways a production deployment can end up accepting every submission.

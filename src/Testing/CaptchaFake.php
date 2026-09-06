@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Captcha\Testing;
 
 use PHPUnit\Framework\Assert;
-use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
-use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Enums\Provider;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
-use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\Contracts\CaptchaAdapter;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
  * The adapter a host application's tests run against.
@@ -39,7 +39,7 @@ final class CaptchaFake implements CaptchaAdapter
     /**
      * Queue results consumed one per call, for a flow that verifies more than once.
      *
-     * @param  list<VerificationResult>  $results
+     * @param list<VerificationResult> $results
      */
     public function queue(array $results): self
     {
@@ -77,7 +77,7 @@ final class CaptchaFake implements CaptchaAdapter
     }
 
     /**
-     * @param  null|callable(VerificationAttempt): bool  $matching
+     * @param null|callable(VerificationAttempt): bool $matching
      */
     public function assertVerified(?callable $matching = null): void
     {
@@ -88,7 +88,7 @@ final class CaptchaFake implements CaptchaAdapter
     }
 
     /**
-     * @param  null|callable(VerificationAttempt): bool  $matching
+     * @param null|callable(VerificationAttempt): bool $matching
      */
     public function assertFailed(?callable $matching = null): void
     {
@@ -109,7 +109,8 @@ final class CaptchaFake implements CaptchaAdapter
     }
 
     /**
-     * @param  null|callable(VerificationAttempt): bool  $matching
+     * @param null|callable(VerificationAttempt): bool $matching
+     *
      * @return list<VerificationAttempt>
      */
     private function matching(bool $passed, ?callable $matching): array

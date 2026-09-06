@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Captcha\View\Components;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Simtabi\Laranail\Captcha\Services\CaptchaService;
+use Illuminate\Contracts\View\View;
 use Simtabi\Laranail\Captcha\ValueObjects\Widget;
+use Simtabi\Laranail\Captcha\Services\CaptchaService;
 
 /**
  * `<x-captcha-container />` — where the active provider's widget renders.
@@ -43,7 +43,7 @@ final class Container extends Component
         }
 
         return view('laranail-captcha::components.container', [
-            'widget' => $this->widget,
+            'widget'           => $this->widget,
             'widgetAttributes' => $attributes,
         ]);
     }

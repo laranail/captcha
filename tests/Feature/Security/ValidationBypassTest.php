@@ -26,7 +26,7 @@ it('fails when the captcha response is missing entirely', function (mixed $rule)
     expect($validator->fails())->toBeTrue();
 })->with([
     'string alias' => fn (): string => 'captcha',
-    'rule object' => fn (): CaptchaRule => new CaptchaRule,
+    'rule object'  => fn (): CaptchaRule => new CaptchaRule,
 ]);
 
 /**
@@ -40,12 +40,12 @@ it('fails without raising a TypeError on a value that cannot be a token', functi
 
     expect($validator->fails())->toBeTrue();
 })->with([
-    'null' => null,
+    'null'         => null,
     'empty string' => '',
-    'whitespace' => '   ',
-    'array' => [[['a', 'b']]],
-    'integer' => 1234,
-    'boolean' => true,
+    'whitespace'   => '   ',
+    'array'        => [[['a', 'b']]],
+    'integer'      => 1234,
+    'boolean'      => true,
 ]);
 
 it('reports a missing response once when paired with required', function (): void {

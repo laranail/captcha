@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Contracts\Console\Kernel;
-use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Models\CaptchaSetting;
+use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 
 /**
  * The commands, actually run.
@@ -44,7 +44,7 @@ it('fails when hostname enforcement is on with nothing to compare against', func
     config()->set('laranail.captcha.provider', 'turnstile');
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'site-key-abcdef',
-        'secret' => 'a-secret',
+        'secret'   => 'a-secret',
     ]);
     config()->set('laranail.captcha.verification.enforce_hostname', true);
     config()->set('laranail.captcha.verification.allowed_hostnames', []);
@@ -71,7 +71,7 @@ it('does not raise the hostname check for a self-hosted provider', function (): 
 it('shows where every provider resolves its credentials from', function (): void {
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'site-key-abcdef',
-        'secret' => 'a-secret',
+        'secret'   => 'a-secret',
     ]);
     app()->forgetInstance(CredentialStore::class);
 
@@ -83,7 +83,7 @@ it('shows where every provider resolves its credentials from', function (): void
 it('never prints a secret', function (): void {
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'site-key-abcdef',
-        'secret' => 'the-actual-secret',
+        'secret'   => 'the-actual-secret',
     ]);
     app()->forgetInstance(CredentialStore::class);
 
