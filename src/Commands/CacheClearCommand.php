@@ -27,9 +27,6 @@ final class CacheClearCommand extends Command
 
     protected $name = 'laranail::captcha.cache-clear';
 
-    /** @var list<string> */
-    protected array $commandAliases = ['captcha:cache-clear'];
-
     protected $signature = 'laranail::captcha.cache-clear {--environment= : Clear another environment’s entries}';
 
     protected $description = 'Forget cached captcha credentials so database changes apply immediately.';

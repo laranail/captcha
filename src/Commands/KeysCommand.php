@@ -25,9 +25,6 @@ final class KeysCommand extends Command
 
     protected $name = 'laranail::captcha.keys';
 
-    /** @var list<string> */
-    protected array $commandAliases = ['captcha:keys'];
-
     protected $description = 'Show which source each provider’s credentials resolve from, redacted.';
 
     public function handle(ResolveCredentials $resolveCredentials): int

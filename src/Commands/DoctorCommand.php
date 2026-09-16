@@ -26,9 +26,6 @@ final class DoctorCommand extends Command
 
     protected $name = 'laranail::captcha.doctor';
 
-    /** @var list<string> */
-    protected array $commandAliases = ['captcha:doctor'];
-
     protected $description = 'Report the active captcha provider, where its credentials come from, and anything unsafe.';
 
     public function handle(

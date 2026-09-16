@@ -22,9 +22,6 @@ final class InstallCommand extends Command
 
     protected $name = 'laranail::captcha.install';
 
-    /** @var list<string> */
-    protected array $commandAliases = ['captcha:install'];
-
     protected $signature = 'laranail::captcha.install {--migrations : Also publish the optional settings-table migration}';
 
     protected $description = 'Publish the captcha config file, and optionally the settings migration.';

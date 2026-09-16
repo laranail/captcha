@@ -83,7 +83,7 @@ it('initialises, clears an expired token and resets the widget', function (): vo
     $file = tempnam(sys_get_temp_dir(), 'captcha-runtime') . '.js';
     file_put_contents($file, extractRuntime());
 
-    $process = new Process([(string) node(), dirname(__DIR__) . '/js/harness.mjs', $file]);
+    $process = new Process([(string) node(), __DIR__ . '/../js/harness.mjs', $file]);
     $process->run();
 
     @unlink($file);

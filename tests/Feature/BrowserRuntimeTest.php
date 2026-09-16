@@ -28,7 +28,7 @@ use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
  */
 function browserDir(): string
 {
-    return dirname(__DIR__) . '/Browser';
+    return __DIR__ . '/../Browser';
 }
 
 /**

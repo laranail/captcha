@@ -47,7 +47,7 @@ abstract class TestCase extends Orchestra
      */
     protected function defineDatabaseMigrations(): void
     {
-        $migration = require dirname(__DIR__) . '/database/migrations/create_captcha_settings_table.php.stub';
+        $migration = require __DIR__ . '/../database/migrations/create_captcha_settings_table.php.stub';
 
         $migration->up();
     }
