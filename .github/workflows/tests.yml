@@ -16,7 +16,7 @@ jobs:
   # dependency precisely so the ALTCHA adapter is integration-tested against the real
   # library rather than a hand-written approximation of its challenge format.
   test:
-    name: PHP ${{ matrix.php }} · L${{ matrix.laravel }} · ${{ matrix.stability }}
+    name: PHP ${{ matrix.php }} · ${{ matrix.stability }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -24,7 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         php: ['8.4', '8.5']
-        laravel: ['13']
         stability: [prefer-stable]
         include:
           # One lowest-dependency run, on the floor. This is what catches a constraint that
@@ -34,7 +33,6 @@ jobs:
           # on symfony/tui. setup-php resolves '8.4' to the latest 8.4.x, so this run does not
           # prove 8.4.1 specifically — the constraint in composer.json is what does.
           - php: '8.4'
-            laravel: '13'
             stability: prefer-lowest
 
     steps:
@@ -49,9 +47,31 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath, intl
           coverage: none
 
+      - name: Resolve composer cache directory
+        id: composer-cache
+        shell: bash
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore composer cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: composer-${{ runner.os }}-${{ matrix.php }}-
+
+      - name: Drop cached laranail archives
+        # laranail/* resolve through a single MOVING v0.1.0 tag, so composer's dist
+        # cache is keyed on a name whose contents change underneath it. A restored
+        # archive is then silently stale: the install reports success and unpacks
+        # whatever was cached the first time. Everything else is immutable per
+        # version and stays cached.
+        # POSIX command via bash: Windows runners default to PowerShell, where this
+        # would be a parse error rather than a no-op.
+        shell: bash
+        run: rm -rf "$(composer config cache-files-dir)/laranail"
+
       - name: Install dependencies
         run: |
-          composer require "illuminate/contracts:^${{ matrix.laravel }}.0" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
       - name: Run the suite
@@ -87,6 +107,29 @@ jobs:
 
       - name: Remove the optional integration
         run: composer remove --dev --no-update --no-interaction altcha-org/altcha
+
+      - name: Resolve composer cache directory
+        id: composer-cache
+        shell: bash
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore composer cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: composer-${{ runner.os }}-${{ matrix.php }}-
+
+      - name: Drop cached laranail archives
+        # laranail/* resolve through a single MOVING v0.1.0 tag, so composer's dist
+        # cache is keyed on a name whose contents change underneath it. A restored
+        # archive is then silently stale: the install reports success and unpacks
+        # whatever was cached the first time. Everything else is immutable per
+        # version and stays cached.
+        # POSIX command via bash: Windows runners default to PowerShell, where this
+        # would be a parse error rather than a no-op.
+        shell: bash
+        run: rm -rf "$(composer config cache-files-dir)/laranail"
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -124,6 +167,29 @@ jobs:
           php-version: '8.4'
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath, intl
           coverage: none
+
+      - name: Resolve composer cache directory
+        id: composer-cache
+        shell: bash
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore composer cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: composer-${{ runner.os }}-${{ matrix.php }}-
+
+      - name: Drop cached laranail archives
+        # laranail/* resolve through a single MOVING v0.1.0 tag, so composer's dist
+        # cache is keyed on a name whose contents change underneath it. A restored
+        # archive is then silently stale: the install reports success and unpacks
+        # whatever was cached the first time. Everything else is immutable per
+        # version and stays cached.
+        # POSIX command via bash: Windows runners default to PowerShell, where this
+        # would be a parse error rather than a no-op.
+        shell: bash
+        run: rm -rf "$(composer config cache-files-dir)/laranail"
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
