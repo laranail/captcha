@@ -1,9 +1,10 @@
 # laranail/captcha
 
-[![Latest version on Packagist](https://img.shields.io/packagist/v/laranail/captcha.svg)](https://packagist.org/packages/laranail/captcha)
 [![Tests](https://img.shields.io/github/actions/workflow/status/laranail/captcha/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/laranail/captcha/actions/workflows/tests.yml)
 [![Static analysis](https://img.shields.io/github/actions/workflow/status/laranail/captcha/static-analysis.yml?branch=main&label=static%20analysis&style=flat-square)](https://github.com/laranail/captcha/actions/workflows/static-analysis.yml)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+
+`laranail/captcha` is not published to Packagist, so there is no registry-version badge to show — see [Install](#install).
 
 > One captcha contract for Laravel across eleven providers — from Cloudflare Turnstile to
 > self-hosted arithmetic — with environment-scoped credentials, a database-backed settings store,
