@@ -1,5 +1,7 @@
 # Contributing
 
+Where this file is silent, the [laranail contributing guide](https://github.com/laranail/.github/blob/HEAD/CONTRIBUTING.md) applies.
+
 Thanks for helping. This package sits on the anti-abuse path, so the bar for changes is a little
 higher than usual — read the security section before opening a pull request.
 
