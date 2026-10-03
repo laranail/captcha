@@ -26,7 +26,20 @@ This family resolves through git VCS repositories rather than Packagist — deli
 version badge above points at the git tag for that reason. The repository entries are already in
 `composer.json`. See [Installation](docs/installation.md).
 
-## Quick start
+## Quick start guide and usage
+
+### Getting started
+
+Nothing to configure: the default provider is self-hosted arithmetic, so a fresh install works with no account, no keys and no JavaScript. Two optional commands:
+
+```bash
+php artisan laranail::captcha.install   # publish config/laranail/captcha.php, only to change something
+php artisan laranail::captcha.doctor    # report the active provider and where each credential resolves from
+```
+
+To switch provider, set `CAPTCHA_PROVIDER`, `CAPTCHA_SITE_KEY` and `CAPTCHA_SECRET_KEY` in `.env`.
+
+### Usage
 
 ```blade
 <form method="post" action="/register">
@@ -42,6 +55,16 @@ version badge above points at the git tag for that reason. The repository entrie
 $request->validate([
     'email' => ['required', 'email'],
     'captcha' => ['captcha'],
+]);
+```
+
+Bind a token to one form, so a token minted for another form cannot be replayed on login:
+
+```php
+use Simtabi\Laranail\Captcha\Rules\Captcha;
+
+$request->validate([
+    'captcha' => [Captcha::for('login')],
 ]);
 ```
 
