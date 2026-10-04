@@ -86,6 +86,11 @@ final class CaptchaServiceProvider extends PackageServiceProvider
     #[Override]
     public function packageRegistered(): void
     {
+        // The install command's package-tools base takes the Package in its constructor, which the
+        // container cannot autowire. Binding it here keeps the command registered by class name,
+        // like the other three, so it is still only constructed when Artisan resolves it.
+        $this->app->bind(InstallCommand::class, fn (): InstallCommand => new InstallCommand($this->package));
+
         $config = $this->app->make(Repository::class);
 
         // Resolved once, here, rather than on every lookup. It is also the value the production
