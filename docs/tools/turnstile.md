@@ -25,7 +25,7 @@ works here the day they ship it without a release from us.
 | `theme` | `auto` · `light` · `dark` | |
 
 **For a full-width widget set `size` to `flexible`** — via `CAPTCHA_SIZE=flexible`, the
-`captcha.widget.size` config key, or per-widget with `<x-captcha-container size="flexible" />`.
+`captcha.widget.size` config key, or per-widget with `<x-laranail-captcha::container size="flexible" />`.
 Turnstile sizes itself to the container, so the container also needs a width; it is not a fixed
 `100%` on the widget itself.
 

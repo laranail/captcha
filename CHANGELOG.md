@@ -7,13 +7,39 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- The components under the package prefix: `<x-laranail-captcha::captcha />`,
+  `<x-laranail-captcha::js />` and `<x-laranail-captcha::container />`.
+- The `laranail.captcha` container alias for `CaptchaService`.
+- The `laranail_captcha` string validation rule, implicit like the bare one, reporting the rule's own
+  translated message on failure (`CaptchaServiceProvider::VALIDATION_RULE`).
+- The canonical `laranail/captcha` view namespace, registered by package-tools over the same paths
+  as `laranail-captcha`.
+- A live-registry naming test (`tests/Feature/NamingConventionTest.php`) built on package-tools'
+  `AssertsRegisteredNames`.
+
 ### Changed
 
+- The components render through `laranail/captcha::components.*`. `laranail-captcha::` still
+  resolves the same files.
+- Docs, the README and the install command lead with the scoped tags and rule.
+- Requires `laranail/package-tools ^0.1.3`.
 - `laranail::captcha.install` now extends laranail/package-tools' `InstallCommand` and takes
   laranail/console's display API and run lifecycle from its `InteractsWithConsoleServices` and
   `InteractsWithConsoleWriter` traits instead of its `Command` base. Name, option, description,
   listing visibility, output and exit codes are unchanged and pinned by a new contract test. The
   command is bound in the container because the new base takes the `Package` in its constructor.
+
+### Deprecated
+
+- The bare `<x-captcha />`, `<x-captcha-js />` and `<x-captcha-container />` tags. They render the
+  same components and raise one `E_USER_DEPRECATED` notice when a template using them compiles.
+- The bare `captcha` validation rule. It validates as before, implicit included, with one
+  `E_USER_DEPRECATED` notice per process.
+- The bare `captcha` container alias. It resolves the same `CaptchaService`; it cannot raise a notice.
+
+Each is removed no earlier than the next minor after 0.1.
 
 ## [0.1.0] - 2026-08-15
 

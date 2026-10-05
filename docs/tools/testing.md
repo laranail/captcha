@@ -170,7 +170,7 @@ while the entire suite stays green. Nothing else here can see that.
 `.github/workflows/install.yml` builds the dist with `git archive` (exactly how Composer builds one
 from a tag), asserts both directions — that nothing the runtime needs was stripped, and that
 `tests/`, `docs/` and `.github/` did not leak into it — then installs the result into a real Laravel
-application, runs `laranail::captcha.doctor`, renders `<x-captcha />` and publishes every advertised
+application, runs `laranail::captcha.doctor`, renders `<x-laranail-captcha::captcha />` and publishes every advertised
 tag, checking the files landed. `vendor:publish` exits zero for a tag that does not exist, so each
 tag is verified by its output rather than its exit code.
 

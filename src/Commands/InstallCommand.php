@@ -63,7 +63,7 @@ final class InstallCommand extends PackageToolsInstallCommand
         }
 
         $this->services->display()->info(sprintf(
-            'Active provider: %s. Drop <x-captcha /> in a form and add \'captcha\' => \'captcha\' to its rules.',
+            'Active provider: %s. Drop <x-laranail-captcha::captcha /> in a form and add \'captcha\' => \'laranail_captcha\' to its rules.',
             $this->activeProvider(),
         ));
 

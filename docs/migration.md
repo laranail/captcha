@@ -10,7 +10,10 @@ From `rahul900day/laravel-captcha`, and from the `laranail/toolkit` captcha modu
 ```
 
 `Rahul900day\Captcha\` becomes `Simtabi\Laranail\Captcha\`. The `Captcha` facade alias and the
-`<x-captcha-js />` / `<x-captcha-container />` tags are unchanged, so your Blade needs no edits.
+`<x-captcha-js />` / `<x-captcha-container />` tags still work, so your Blade needs no edits on day
+one. The tags and the `captcha` string rule are deprecated aliases: move to
+`<x-laranail-captcha::js />`, `<x-laranail-captcha::container />` and `laranail_captcha` (see
+[Blade components](tools/blade-components.md) and [the validation rule](tools/validation-rules.md)).
 
 ### Read these before deploying
 

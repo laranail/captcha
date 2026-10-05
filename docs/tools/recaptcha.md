@@ -16,9 +16,9 @@ reading `tokenProperties.valid` and `riskAnalysis.score`.
 
 ## v3 and v2-invisible have nothing to click
 
-Their token only exists once `grecaptcha.execute()` has run. `<x-captcha />` wires that: it
+Their token only exists once `grecaptcha.execute()` has run. `<x-laranail-captcha::captcha />` wires that: it
 intercepts the enclosing form's submit once, mints the token and replays the submit. Place
-`<x-captcha-container />` by hand instead and the form submits with no token at all — a failure
+`<x-laranail-captcha::container />` by hand instead and the form submits with no token at all — a failure
 that looks like the captcha simply not working, with nothing in any log.
 
 ## The score is enforced, not reported

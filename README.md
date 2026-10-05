@@ -45,7 +45,7 @@ To switch provider, set `CAPTCHA_PROVIDER`, `CAPTCHA_SITE_KEY` and `CAPTCHA_SECR
 <form method="post" action="/register">
     @csrf
 
-    <x-captcha />
+    <x-laranail-captcha::captcha />
 
     <button type="submit">Create account</button>
 </form>
@@ -54,7 +54,7 @@ To switch provider, set `CAPTCHA_PROVIDER`, `CAPTCHA_SITE_KEY` and `CAPTCHA_SECR
 ```php
 $request->validate([
     'email' => ['required', 'email'],
-    'captcha' => ['captcha'],
+    'captcha' => ['laranail_captcha'],
 ]);
 ```
 

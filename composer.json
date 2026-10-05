@@ -54,7 +54,7 @@
         "laranail/console": "^0.1",
         "laranail/db-tools": "^0.1",
         "laranail/enumerator": "^0.1",
-        "laranail/package-tools": "^0.1",
+        "laranail/package-tools": "^0.1.3",
         "psr/clock": "^1.0",
         "psr/log": "^3.0"
     },

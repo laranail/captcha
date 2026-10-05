@@ -12,17 +12,17 @@ use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Adapters\Math\MathProblem;
 
 /**
- * `<x-captcha />` — the whole thing, in one tag.
+ * `<x-laranail-captcha::captcha />` (deprecated alias `<x-captcha />`) — the whole thing, in one tag.
  *
- * Drop it inside a form, add `'captcha' => 'captcha'` to the validation rules, and you are done —
+ * Drop it inside a form, add `'captcha' => 'laranail_captcha'` to the validation rules, and you are done —
  * whichever of the eleven providers is configured, with or without JavaScript, with or without an
  * account anywhere. Switching provider later is a config line and nothing else; this markup does
  * not change.
  *
- * `<x-captcha-js />` and `<x-captcha-container />` remain for layouts that need the script in
- * `<head>` and the widget further down. This exists because most forms do not, and asking someone
- * to place two tags correctly is the difference between a package that gets used and one that gets
- * copied from Stack Overflow.
+ * `<x-laranail-captcha::js />` and `<x-laranail-captcha::container />` remain for layouts that
+ * need the script in `<head>` and the widget further down. This exists because most forms do not,
+ * and asking someone to place two tags correctly is the difference between a package that gets used
+ * and one that gets copied from Stack Overflow.
  */
 final class Captcha extends Component
 {
@@ -53,7 +53,7 @@ final class Captcha extends Component
             $attributes['data-size'] = $this->size;
         }
 
-        return view('laranail-captcha::components.captcha', [
+        return view('laranail/captcha::components.captcha', [
             'widget'           => $widget,
             'widgetAttributes' => $attributes,
             'scriptUrl'        => $widget->scriptUrl,

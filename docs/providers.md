@@ -43,9 +43,9 @@ to choose — so no provider fact lives in two places.
 
 - **reCAPTCHA v3 / Enterprise** need an action name (`providers.recaptcha.action`), and Enterprise
   needs a `project_id` alongside an API key as the secret.
-- **reCAPTCHA v3 and v2-invisible have nothing to click.** `<x-captcha />` wires the execution for
+- **reCAPTCHA v3 and v2-invisible have nothing to click.** `<x-laranail-captcha::captcha />` wires the execution for
   you: it intercepts the enclosing form's submit once, mints the token and replays the submit. If
-  you place `<x-captcha-container />` by hand instead, you have to call `grecaptcha.execute()`
+  you place `<x-laranail-captcha::container />` by hand instead, you have to call `grecaptcha.execute()`
   yourself, or the form submits with no token at all.
 - **Arkose** needs a `client` extra — its verify endpoint is per-customer
   (`{client}-verify.arkoselabs.com`).

@@ -76,6 +76,24 @@ very different setting from a missing one.
 One consequence to know: changing captcha config at runtime needs the service forgotten from the
 container, because the policy was already read.
 
+
+## Public names carry the vendor
+
+Laravel keeps Blade component aliases, container aliases, validation rules and view namespaces in
+flat, host-owned maps, where a second claimant silently replaces the first. So:
+
+| Surface | Name | Deprecated alias (removed no earlier than the next minor after 0.1) |
+|---|---|---|
+| Blade components | `<x-laranail-captcha::captcha />`, `::js`, `::container` | `<x-captcha />`, `<x-captcha-js />`, `<x-captcha-container />` |
+| Container alias | `laranail.captcha` (and `CaptchaService::class`) | `captcha` |
+| Validation rule | `laranail_captcha` | `captcha` |
+| View namespace | `laranail/captcha` (canonical), `laranail-captcha` (kept, not deprecated) | |
+| Route name | `laranail.captcha.challenge` | |
+
+Each deprecated alias still works. The tags and the rule raise one `E_USER_DEPRECATED` notice; the
+container alias cannot, because the container offers no hook on alias resolution.
+`tests/Feature/NamingConventionTest.php` asserts all of it against the live registries.
+
 ---
 
 [← Docs index](../README.md#documentation)

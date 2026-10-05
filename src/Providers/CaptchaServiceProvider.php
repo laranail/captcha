@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Simtabi\Laranail\Package\Tools\Package;
+use Illuminate\View\Compilers\BladeCompiler;
 use Simtabi\Laranail\Captcha\AdapterFactory;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Illuminate\Contracts\Foundation\Application;
@@ -36,10 +37,13 @@ use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
 use Simtabi\Laranail\Captcha\View\Components\Container;
 use Simtabi\Laranail\Captcha\Actions\ResolveCredentials;
 use Simtabi\Laranail\Captcha\Commands\CacheClearCommand;
+use Simtabi\Laranail\Captcha\Support\DeprecationNotices;
 use Simtabi\Laranail\Captcha\Listeners\LogCaptchaOutcome;
 use Simtabi\Laranail\Captcha\Listeners\ResetCaptchaState;
 use Simtabi\Laranail\Captcha\BotManagement\NullBotManager;
 use Simtabi\Laranail\Captcha\Rules\Captcha as CaptchaRule;
+use Simtabi\Laranail\Captcha\View\DeprecatedComponentTags;
+use Illuminate\Validation\Validator as ValidationValidator;
 use Simtabi\Laranail\Captcha\Actions\GuardProductionSafety;
 use Simtabi\Laranail\Captcha\Contracts\BotManagementAdapter;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationPolicy;
@@ -56,6 +60,9 @@ use Simtabi\Laranail\Captcha\View\Components\Captcha as CaptchaComponent;
 
 final class CaptchaServiceProvider extends PackageServiceProvider
 {
+    /** The vendor-scoped name of the string validation rule. */
+    public const string VALIDATION_RULE = 'laranail_captcha';
+
     public function configurePackage(Package $package): void
     {
         $package
@@ -64,11 +71,15 @@ final class CaptchaServiceProvider extends PackageServiceProvider
             ->hasConfigFile('captcha')
             ->hasViews('laranail-captcha')
             ->hasTranslations('laranail-captcha')
-            // Explicit aliases, not a component namespace. A namespace resolves as
-            // `<x-laranail-captcha::js />`; the tags this package has always documented, and the ones every
-            // existing application's markup already contains, are `<x-captcha-js />` and
-            // `<x-captcha-container />`. Keeping them is what makes the migration a namespace
-            // change rather than a sweep through every blade file.
+            // The components live under the package prefix -- `<x-laranail-captcha::captcha />`,
+            // `<x-laranail-captcha::js />`, `<x-laranail-captcha::container />` -- because Blade's alias
+            // map is flat and host-owned, and a bare `captcha` tag is one sibling package away from being
+            // silently replaced.
+            ->hasBladeComponentNamespace('Simtabi\\Laranail\\Captcha\\View\\Components', 'laranail-captcha')
+            // @deprecated The bare tags every existing application's markup contains -- `<x-captcha />`,
+            //             `<x-captcha-js />`, `<x-captcha-container />` -- keep rendering the same classes,
+            //             and announce themselves once when a template using them compiles
+            //             (DeprecatedComponentTags). Removed no earlier than the next minor after 0.1.
             ->hasBladeComponentAliases([
                 'captcha'           => CaptchaComponent::class,
                 'captcha-js'        => Js::class,
@@ -199,6 +210,12 @@ final class CaptchaServiceProvider extends PackageServiceProvider
             );
         });
 
+        // Container aliases share one flat, host-owned map, so the package's own name carries the vendor.
+        $this->app->alias(CaptchaService::class, 'laranail.captcha');
+
+        // @deprecated The bare `captcha` alias is removed no earlier than the next minor after 0.1; resolve
+        //             `laranail.captcha`, CaptchaService::class or the facade. The container offers no hook on
+        //             alias resolution, so it cannot announce itself; the deprecation is documented.
         $this->app->alias(CaptchaService::class, 'captcha');
 
         $this->app->singleton(
@@ -237,6 +254,7 @@ final class CaptchaServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->registerValidationRule();
+        $this->registerDeprecatedComponentTagNotice();
         $this->registerChallengeRoute();
         $this->registerOctaneReset();
         $this->registerLogging();
@@ -373,7 +391,7 @@ final class CaptchaServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Register the `captcha` string rule as **implicit**.
+     * Register the `laranail_captcha` string rule as **implicit**, and the bare `captcha` rule beside it.
      *
      * Deliberately not `$package->hasValidationRule()`. That helper registers through
      * `Validator::extend`, and a non-implicit rule is skipped entirely when the field is missing
@@ -381,17 +399,65 @@ final class CaptchaServiceProvider extends PackageServiceProvider
      * exactly what an attacker does, and the old package let those submissions through.
      *
      * `extendImplicit` also gets the pairing with `required` right. Laravel stops validating an
-     * attribute once an implicit rule on it has failed, so `['required', 'captcha']` on an absent
-     * field reports one message rather than two.
+     * attribute once an implicit rule on it has failed, so `['required', 'laranail_captcha']` on an
+     * absent field reports one message rather than two.
+     *
+     * The rule map is flat and host-owned, so the package's name carries the vendor, spelled the way
+     * `laranail/validation` spells its aliases (`laranail_iban`): an underscore survives Laravel's
+     * studly/snake round trip, so the message key is the rule name as written. The scoped rule hands
+     * over the rule's own translated message.
      */
     private function registerValidationRule(): void
     {
         Validator::extendImplicit(
-            'captcha',
+            self::VALIDATION_RULE,
 
             // Run through Laravel's own validator so the ValidationRule contract, and the
             // rule's message resolution, are honoured natively rather than reimplemented.
-            static fn (string $attribute, mixed $value): bool => validator([$attribute => $value], [$attribute => [new CaptchaRule]])->passes(),
+            static function (string $attribute, mixed $value, array $parameters, ValidationValidator $validator): bool {
+                $inner = validator([$attribute => $value], [$attribute => [new CaptchaRule]]);
+
+                if ($inner->passes()) {
+                    return true;
+                }
+
+                $message = $inner->errors()->first($attribute);
+
+                if ($message !== '') {
+                    $validator->setCustomMessages([$attribute . '.' . self::VALIDATION_RULE => $message]);
+                }
+
+                return false;
+            },
         );
+
+        // @deprecated The bare `captcha` rule is removed no earlier than the next minor after 0.1; use
+        //             `laranail_captcha` or `new Captcha`. It validates exactly as before and raises one
+        //             E_USER_DEPRECATED notice per process.
+        Validator::extendImplicit(
+            'captcha',
+            static function (string $attribute, mixed $value): bool {
+                DeprecationNotices::once(
+                    'rule:captcha',
+                    'laranail/captcha: the "captcha" validation rule is deprecated and will be removed no earlier than the next minor after 0.1; use "' . self::VALIDATION_RULE . '" or new Captcha.',
+                );
+
+                return validator([$attribute => $value], [$attribute => [new CaptchaRule]])->passes();
+            },
+        );
+    }
+
+    /**
+     * Announce the bare component tags once, when a template that uses them compiles.
+     *
+     * Blade's alias map has no hook on resolution, but every template passes through the
+     * precompilers before it is compiled, and a compiled template is cached -- so this costs one
+     * pattern match per compile, not per render, and never alters the template.
+     */
+    private function registerDeprecatedComponentTagNotice(): void
+    {
+        $this->callAfterResolving('blade.compiler', static function (BladeCompiler $blade): void {
+            $blade->precompiler(new DeprecatedComponentTags);
+        });
     }
 }

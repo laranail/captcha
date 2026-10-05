@@ -84,7 +84,7 @@ Leave `hmac_key` null on the self-hosted providers and a key is derived from `AP
 ## `widget`
 
 `theme`, `size`, `language` and `nonce`, applied to whichever provider is active. Set `nonce` and
-pass one to `<x-captcha :nonce="$nonce" />` to keep a strict CSP without `unsafe-inline`.
+pass one to `<x-laranail-captcha::captcha :nonce="$nonce" />` to keep a strict CSP without `unsafe-inline`.
 
 ## `bot_management`
 
