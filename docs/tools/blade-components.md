@@ -4,16 +4,16 @@ Three components. Most forms need only the first.
 
 | Tag | Renders |
 |---|---|
-| `<x-captcha />` | Everything — script and widget, or a server-rendered question |
-| `<x-captcha-js />` | The active provider's script tag alone |
-| `<x-captcha-container />` | The widget mount point alone |
+| `<x-laranail-captcha::captcha />` | Everything — script and widget, or a server-rendered question |
+| `<x-laranail-captcha::js />` | The active provider's script tag alone |
+| `<x-laranail-captcha::container />` | The widget mount point alone |
 
-## `<x-captcha />`
+## `<x-laranail-captcha::captcha />`
 
 ```blade
 <form method="post" action="/register">
     @csrf
-    <x-captcha />
+    <x-laranail-captcha::captcha />
     <button type="submit">Create account</button>
 </form>
 ```
@@ -27,33 +27,38 @@ and widget div.
 The split exists because asking someone to place two tags correctly is the difference between a
 package that gets used and one that gets copied wrong from Stack Overflow.
 
-## `<x-captcha-js />` and `<x-captcha-container />`
+## `<x-laranail-captcha::js />` and `<x-laranail-captcha::container />`
 
 For layouts that want the script in `<head>` and the widget further down:
 
 ```blade
 <head>
-    <x-captcha-js lang="fr" nonce="{{ $nonce }}" />
+    <x-laranail-captcha::js lang="fr" nonce="{{ $nonce }}" />
 </head>
 <body>
     <form method="post">
         @csrf
-        <x-captcha-container theme="dark" size="compact" />
+        <x-laranail-captcha::container theme="dark" size="compact" />
     </form>
 </body>
 ```
 
-These are the tags the package has always documented, so markup written against the original
-integration keeps working — the migration is a namespace change rather than a sweep through every
-Blade file.
+## Deprecated bare tags
+
+`<x-captcha />`, `<x-captcha-js />` and `<x-captcha-container />` are the tags the package
+documented before 0.1, and they still render the same components. They are deprecated aliases,
+removed no earlier than the next minor after 0.1: Blade's component aliases are one flat,
+host-owned map, so a bare `captcha` tag is one sibling package away from being silently replaced.
+Each raises one `E_USER_DEPRECATED` notice, when a template using it compiles. Replace them with
+the `laranail-captcha::` tags above.
 
 ## Providers with nothing to click
 
 reCAPTCHA v3 and v2-invisible mint their token from `grecaptcha.execute()` rather than from a
-checkbox. `<x-captcha />` handles that: it intercepts the enclosing form's submit once, mints the
+checkbox. `<x-laranail-captcha::captcha />` handles that: it intercepts the enclosing form's submit once, mints the
 token into a hidden `captcha` field and replays the submit.
 
-That is why the all-in-one tag is worth preferring. `<x-captcha-container />` alone renders an empty
+That is why the all-in-one tag is worth preferring. `<x-laranail-captcha::container />` alone renders an empty
 div for those two providers, and the form submits with no token — the failure looks like the captcha
 simply not working, with nothing in the logs.
 
@@ -73,7 +78,7 @@ and a JavaScript identifier.
 ## Content Security Policy
 
 ```blade
-<x-captcha :nonce="$nonce" />
+<x-laranail-captcha::captcha :nonce="$nonce" />
 ```
 
 Emitted on the script tag, so a strict CSP does not need `unsafe-inline`.

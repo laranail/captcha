@@ -10,7 +10,7 @@ use Simtabi\Laranail\Captcha\ValueObjects\Widget;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
 
 /**
- * `<x-captcha-container />` — where the active provider's widget renders.
+ * `<x-laranail-captcha::container />` (deprecated alias `<x-captcha-container />`) — where the active provider's widget renders.
  *
  * Each instance gets its own generated id, so two forms on one page work. The old implementation
  * had no ids and its callback reached for `document.querySelector('.cf-turnstile')`, which finds
@@ -42,7 +42,7 @@ final class Container extends Component
             $attributes['data-size'] = $this->size;
         }
 
-        return view('laranail-captcha::components.container', [
+        return view('laranail/captcha::components.container', [
             'widget'           => $this->widget,
             'widgetAttributes' => $attributes,
         ]);

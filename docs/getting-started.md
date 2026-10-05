@@ -7,7 +7,7 @@ A protected form and a verified submission, in one page.
 ```blade
 <form method="post" action="/register">
     @csrf
-    <x-captcha />
+    <x-laranail-captcha::captcha />
     <button type="submit">Create account</button>
 </form>
 ```
@@ -15,7 +15,7 @@ A protected form and a verified submission, in one page.
 ```php
 $request->validate([
     'email' => ['required', 'email'],
-    'captcha' => ['captcha'],
+    'captcha' => ['laranail_captcha'],
 ]);
 ```
 

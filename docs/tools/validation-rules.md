@@ -3,7 +3,7 @@
 One rule, two forms, and one property that matters more than the rest.
 
 ```php
-$request->validate(['captcha' => ['captcha']]);
+$request->validate(['captcha' => ['laranail_captcha']]);
 ```
 
 ```php
@@ -12,6 +12,15 @@ use Simtabi\Laranail\Captcha\Rules\Captcha;
 $request->validate(['captcha' => [new Captcha]]);
 $request->validate(['captcha' => [Captcha::for('login')]]);
 ```
+
+The string rule is `laranail_captcha`, spelled the way `laranail/validation` spells its rules
+(`laranail_iban`): the validator's rule map is flat and host-owned, and an underscore survives
+Laravel's studly/snake round trip, so the message key is the rule name as written. On failure it
+reports the rule's own translated message.
+
+**The bare `captcha` rule is a deprecated alias**, removed no earlier than the next minor after
+0.1. It validates exactly as before, implicit included, and raises one `E_USER_DEPRECATED` notice
+per process.
 
 ## It is implicit
 
@@ -26,7 +35,7 @@ because an application can reach the rule either way.
 ## Pairing with `required`
 
 Harmless. Laravel stops validating an attribute once an implicit rule on it has failed, so
-`['required', 'captcha']` on a missing field produces one message rather than two.
+`['required', 'laranail_captcha']` on a missing field produces one message rather than two.
 
 ## Binding to an action
 

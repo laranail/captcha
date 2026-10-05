@@ -6,7 +6,7 @@ The most-asked question about the package this replaced, and the one it never an
 <form wire:submit="register">
     <input type="email" wire:model="email">
 
-    <x-captcha />
+    <x-laranail-captcha::captcha />
 
     <button type="submit">Create account</button>
 </form>
@@ -58,7 +58,7 @@ new class extends Component {
 ?>
 
 <form wire:submit="register">
-    <x-captcha />
+    <x-laranail-captcha::captcha />
     <button type="submit">Create account</button>
 </form>
 ```

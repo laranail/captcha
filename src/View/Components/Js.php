@@ -10,7 +10,7 @@ use Simtabi\Laranail\Captcha\Support\Locale;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
 
 /**
- * `<x-captcha-js />` — the active provider's script tag.
+ * `<x-laranail-captcha::js />` (deprecated alias `<x-captcha-js />`) — the active provider's script tag.
  *
  * **Returns a View, never a string.** A component whose `render()` returns a string has that
  * string written to a file and compiled as a Blade template
@@ -35,7 +35,7 @@ final class Js extends Component
         $captcha = app(CaptchaService::class);
         $widget = $captcha->widget();
 
-        return view('laranail-captcha::components.js', [
+        return view('laranail/captcha::components.js', [
             'scriptUrl' => $widget->scriptUrl,
             'nonce'     => $this->nonce,
             'lang'      => Locale::sanitise($this->lang),
