@@ -86,8 +86,8 @@ One line, and nothing in your forms changes:
 
 ```dotenv
 CAPTCHA_PROVIDER=turnstile
-CAPTCHA_SITE_KEY=0x4AAA...
-CAPTCHA_SECRET_KEY=0x4AAA...
+CAPTCHA_SITE_KEY=example-key
+CAPTCHA_SECRET_KEY=example-key
 ```
 
 Forms bind to the canonical `captcha` field, and the widget writes it whichever provider is active.
