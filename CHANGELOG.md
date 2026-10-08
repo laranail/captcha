@@ -21,6 +21,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Google's published reCAPTCHA test keys in `TestKeyCredentialStore`, and the live smoke test that
+  uses them, carry inline `ggignore` / `gitleaks:allow` markers so secret scanners stop reporting
+  them. The values and the production guard are unchanged.
 - The components render through `laranail/captcha::components.*`. `laranail-captcha::` still
   resolves the same files.
 - Docs, the README and the install command lead with the scoped tags and rule.

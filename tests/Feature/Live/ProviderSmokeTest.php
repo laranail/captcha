@@ -87,8 +87,8 @@ it('verifies an hCaptcha test token against the documented host', function (): v
 it('shows why the reCAPTCHA test keys are refused in production', function (): void {
     $adapter = liveAdapter(
         Provider::ReCaptchaV2,
-        '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-        '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+        '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', // Google's published test site key. ggignore gitleaks:allow
+        '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', // Google's published test secret. ggignore gitleaks:allow
     );
 
     $result = $adapter->verify('not-a-real-token', VerificationContext::none());

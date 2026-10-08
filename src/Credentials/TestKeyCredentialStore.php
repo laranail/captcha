@@ -46,12 +46,12 @@ final readonly class TestKeyCredentialStore implements CredentialStore
             'secret'   => '0x0000000000000000000000000000000000000000',
         ],
         'recaptcha-v2' => [
-            'site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-            'secret'   => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+            'site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', // Google's published test key. ggignore gitleaks:allow
+            'secret'   => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', // Google's published test key. ggignore gitleaks:allow
         ],
         'recaptcha-v2-invisible' => [
-            'site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-            'secret'   => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+            'site_key' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', // Google's published test key. ggignore gitleaks:allow
+            'secret'   => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', // Google's published test key. ggignore gitleaks:allow
         ],
     ];
 
