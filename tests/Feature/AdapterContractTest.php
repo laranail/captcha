@@ -8,6 +8,7 @@ use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Illuminate\Http\Client\ConnectionException;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
@@ -30,7 +31,7 @@ beforeEach(function (): void {
     foreach (httpProviders() as $provider) {
         $credentials[$provider->value] = [
             'site_key'   => 'site-key',
-            'secret'     => 'secret-key',
+            'secret'     => TestCredentials::secret('captcha'),
             'project_id' => 'demo-project',
             'client'     => 'demo',
         ];
@@ -115,13 +116,13 @@ it('never reaches the provider when it is unconfigured', function (Provider $pro
 })->with('http adapters');
 
 it('never leaks the secret into the failure it returns', function (Provider $provider): void {
-    Http::fake(fn () => throw new ConnectionException('POST failed: secret=secret-key'));
+    Http::fake(fn () => throw new ConnectionException('POST failed: secret=' . TestCredentials::secret('captcha')));
 
     $result = app(AdapterFactory::class)->make($provider)->verify('a-token', VerificationContext::none());
 
     // A Guzzle RequestException stringifies the request it failed on, and that request body
     // carries the secret. Reporting the exception verbatim is how a secret reaches the log.
-    expect(json_encode($result->toArray()))->not->toContain('secret-key');
+    expect(json_encode($result->toArray()))->not->toContain(TestCredentials::secret('captcha'));
 })->with('http adapters');
 
 it('passes a genuine success through', function (Provider $provider, array $body): void {

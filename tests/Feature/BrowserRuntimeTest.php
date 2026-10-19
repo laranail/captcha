@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Symfony\Component\Process\Process;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 
 /**
  * Runs the widget in a real browser.
@@ -118,8 +119,8 @@ it('drives the rendered widget in a real browser', function (): void {
     // Three shapes, because the runtime branches on all three: a server-rendered challenge with no
     // vendor script, a hosted widget holding live state, and a provider with nothing to click.
     writeFixture('math', 'math', []);
-    writeFixture('turnstile', 'turnstile', ['site_key' => 'site-key-abc', 'secret' => 'secret-key']);
-    writeFixture('recaptcha-v3', 'recaptcha-v3', ['site_key' => 'site-key-abc', 'secret' => 'secret-key']);
+    writeFixture('turnstile', 'turnstile', ['site_key' => 'site-key-abc', 'secret' => TestCredentials::secret('captcha')]);
+    writeFixture('recaptcha-v3', 'recaptcha-v3', ['site_key' => 'site-key-abc', 'secret' => TestCredentials::secret('captcha')]);
 
     writeManifest(['math', 'turnstile', 'recaptcha-v3']);
 

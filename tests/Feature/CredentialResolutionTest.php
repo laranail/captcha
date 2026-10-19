@@ -7,6 +7,7 @@ use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Models\CaptchaSetting;
 use Simtabi\Laranail\Captcha\Enums\CredentialSource;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 
 /**
  * The resolution order the package promises: database, then config, then test keys.
@@ -19,7 +20,7 @@ beforeEach(function (): void {
     config()->set('laranail.captcha.credentials.database.enabled', true);
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'config-site-key',
-        'secret'   => 'config-secret',
+        'secret'   => TestCredentials::secret('config'),
     ]);
 
     app()->forgetInstance(CredentialStore::class);
@@ -39,14 +40,17 @@ it('prefers a database row over the configured key', function (): void {
     // Written through the model so the encrypted cast round-trips exactly as it will in an
     // application. A raw builder insert would bypass the cast and prove nothing about the read.
     setting('testing', 'site_key', 'db-site-key');
-    setting('testing', 'secret', 'db-secret');
+    setting('testing', 'secret', TestCredentials::secret('database'));
 
     $credentials = app(CredentialStore::class)->get(Provider::Turnstile, 'testing');
+
+    // The secret assertion below proves the row won only while the two secrets differ.
+    expect(TestCredentials::secret('database'))->not->toBe(TestCredentials::secret('config'));
 
     // An operator changing a key in an admin UI has to beat the .env the application booted with,
     // or the admin UI is decorative.
     expect($credentials?->siteKey)->toBe('db-site-key')
-        ->and($credentials?->secret)->toBe('db-secret')
+        ->and($credentials?->secret)->toBe(TestCredentials::secret('database'))
         ->and($credentials?->source)->toBe(CredentialSource::Database);
 });
 
@@ -59,7 +63,7 @@ it('falls through to config when the database has no row', function (): void {
 
 it('scopes rows to the environment they were written for', function (): void {
     setting('production', 'site_key', 'prod-site-key');
-    setting('production', 'secret', 'prod-secret');
+    setting('production', 'secret', TestCredentials::secret('production'));
 
     // A production row must not answer for a staging lookup. This is the whole reason the
     // environment column is not nullable.

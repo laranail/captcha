@@ -8,6 +8,7 @@ use Simtabi\Laranail\Captcha\Enums\Outcome;
 use Simtabi\Laranail\Captcha\Enums\ErrorCode;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Captcha\ValueObjects\VerificationContext;
 
 /**
@@ -22,7 +23,7 @@ beforeEach(function (): void {
     config()->set('laranail.captcha.provider', 'turnstile');
     config()->set('laranail.captcha.environments.default.turnstile', [
         'site_key' => 'site-key',
-        'secret'   => 'secret-key',
+        'secret'   => TestCredentials::secret('captcha'),
     ]);
 
     freezeClockAt('2026-08-12T12:00:00+00:00');
@@ -132,7 +133,7 @@ it('spends a token exactly once', function (): void {
 it('blocks a score below the review threshold', function (): void {
     config()->set('laranail.captcha.provider', 'recaptcha-v3');
     config()->set('laranail.captcha.environments.default.recaptcha-v3', [
-        'site_key' => 'site-key', 'secret' => 'secret-key',
+        'site_key' => 'site-key', 'secret' => TestCredentials::secret('captcha'),
     ]);
     Http::fake(fn () => Http::response(['success' => true, 'score' => 0.1], 200));
 
@@ -144,7 +145,7 @@ it('blocks a score below the review threshold', function (): void {
 it('marks a middling score for review rather than blocking it', function (): void {
     config()->set('laranail.captcha.provider', 'recaptcha-v3');
     config()->set('laranail.captcha.environments.default.recaptcha-v3', [
-        'site_key' => 'site-key', 'secret' => 'secret-key',
+        'site_key' => 'site-key', 'secret' => TestCredentials::secret('captcha'),
     ]);
     Http::fake(fn () => Http::response(['success' => true, 'score' => 0.4], 200));
 
@@ -159,7 +160,7 @@ it('marks a middling score for review rather than blocking it', function (): voi
 it('allows a high score outright', function (): void {
     config()->set('laranail.captcha.provider', 'recaptcha-v3');
     config()->set('laranail.captcha.environments.default.recaptcha-v3', [
-        'site_key' => 'site-key', 'secret' => 'secret-key',
+        'site_key' => 'site-key', 'secret' => TestCredentials::secret('captcha'),
     ]);
     Http::fake(fn () => Http::response(['success' => true, 'score' => 0.9], 200));
 
