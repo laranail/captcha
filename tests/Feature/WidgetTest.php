@@ -6,13 +6,14 @@ use Illuminate\Support\Facades\Blade;
 use Simtabi\Laranail\Captcha\Enums\Provider;
 use Simtabi\Laranail\Captcha\Services\CaptchaService;
 use Simtabi\Laranail\Captcha\Contracts\CredentialStore;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 
 function useProvider(string $provider): void
 {
     config()->set('laranail.captcha.provider', $provider);
     config()->set("laranail.captcha.environments.default.{$provider}", [
         'site_key' => 'site-key-abc',
-        'secret'   => 'secret-key',
+        'secret'   => TestCredentials::secret('captcha'),
     ]);
 
     app()->forgetInstance(CaptchaService::class);
