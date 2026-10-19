@@ -23,9 +23,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **Test credentials are generated at run time.** The provider secrets the suite configured as
   literals are now `TestCredentials::secret('<purpose>')`, so no literal a secret scanner would
-  report reaches the repository, and `tests/Arch/NoLiteralCredentialsTest.php` fails on any
-  literal added later. The `laranail/package-tools` floor is now `^0.1.9`, the first release with
-  `TestCredentials` and the guard.
+  report reaches the repository, and `tests/Arch/NoLiteralCredentialsTest.php` fails on any literal
+  added later. The `laranail/package-tools` floor is now `^0.1.10`, and a second check keeps every
+  purpose passed to `TestCredentials` a single plain word, since a secret scanner reads a compound
+  purpose as the password itself.
 - The components render through `laranail/captcha::components.*`. `laranail-captcha::` still
   resolves the same files.
 - Docs, the README and the install command lead with the scoped tags and rule.
