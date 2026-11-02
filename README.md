@@ -162,5 +162,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately to
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Copyright (c) 2026 Simtabi LLC. Originally
+MIT — see [LICENSE](LICENSE) and [attribution.md](attribution.md). Copyright (c) 2026 Simtabi LLC. Originally
 `rahul900day/laravel-captcha`, copyright (c) Rahul Dey.

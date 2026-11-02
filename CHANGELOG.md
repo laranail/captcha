@@ -21,6 +21,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `LICENSE` is the plain MIT text with every copyright line, so GitHub and Packagist detect it as MIT; the attribution prose moved to `attribution.md`.
 - **Test credentials are generated at run time.** The provider secrets the suite configured as
   literals are now `TestCredentials::secret('<purpose>')`, so no literal a secret scanner would
   report reaches the repository, and `tests/Arch/NoLiteralCredentialsTest.php` fails on any literal
