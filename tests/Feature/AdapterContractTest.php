@@ -58,7 +58,7 @@ dataset('http adapters', fn (): array => array_map(
 ));
 
 it('fails closed when the provider cannot be reached', function (Provider $provider): void {
-    Http::fake(fn () => throw new ConnectionException('Connection timed out'));
+    Http::fake(fn (): never => throw new ConnectionException('Connection timed out'));
 
     $result = app(AdapterFactory::class)->make($provider)->verify('a-token', VerificationContext::none());
 
@@ -116,7 +116,7 @@ it('never reaches the provider when it is unconfigured', function (Provider $pro
 })->with('http adapters');
 
 it('never leaks the secret into the failure it returns', function (Provider $provider): void {
-    Http::fake(fn () => throw new ConnectionException('POST failed: secret=' . TestCredentials::secret('captcha')));
+    Http::fake(fn (): never => throw new ConnectionException('POST failed: secret=' . TestCredentials::secret('captcha')));
 
     $result = app(AdapterFactory::class)->make($provider)->verify('a-token', VerificationContext::none());
 
