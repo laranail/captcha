@@ -56,7 +56,7 @@ it('treats a challenge verdict as a refusal rather than proxying the provider pa
 });
 
 it('fails open when the provider cannot be reached', function (): void {
-    Http::fake(fn () => throw new ConnectionException('timed out'));
+    Http::fake(fn (): never => throw new ConnectionException('timed out'));
 
     $this->get('/guarded')->assertOk();
 });
