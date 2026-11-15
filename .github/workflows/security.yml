@@ -59,3 +59,16 @@ jobs:
 
       - name: Audit
         run: composer audit --no-interaction
+
+  # The OSV scan and the secret scan this repository has never had. The local `audit` job above is
+  # deliberately left alone: it caches composer and pins its own PHP, which the shared workflow does
+  # not, and its `composer update` audit covers dev dependencies that the shared job's
+  # `--locked --no-dev` skips. The two are not duplicates; neither is a superset of the other.
+  shared:
+    name: shared scans (OSV, secrets)
+    uses: laranail/.github/.github/workflows/security.yml@main
+    with:
+      php-version: '8.4'
+    # Carries OP_SERVICE_ACCOUNT_TOKEN through for the ggshield step. The shared workflow declares it
+    # optional and skips with a warning when absent, so this is correct before the credential exists.
+    secrets: inherit
