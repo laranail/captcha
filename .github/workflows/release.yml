@@ -47,8 +47,8 @@ jobs:
         id: changelog
         run: |
           version="${GITHUB_REF_NAME#v}"
-          body=$(awk -v v="$version" '
-            $0 ~ "^## \\[?" v "\\]?" { found = 1; next }
+          body=$(awk -v v="${version%%-*}" '
+            index($0, "## [" v "]") == 1 { found = 1; next }
             found && /^## / { exit }
             found { print }
           ' CHANGELOG.md)
@@ -61,6 +61,8 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
         with:
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          make_latest: ${{ !contains(github.ref_name, '-') }}
           generate_release_notes: true
           body: ${{ steps.changelog.outputs.body }}
           files: captcha.cdx.json
